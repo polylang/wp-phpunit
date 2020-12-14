@@ -4,11 +4,6 @@
 	"license": "GPL-3.0-or-later",
 	"homepage": "https://polylang.pro",
 	"type": "library",
-	"config": {
-		"platform": {
-			"php": "7.1"
-		}
-	},
 	"require": {
 		"phpunit/phpunit": "^7.5"
 	},
