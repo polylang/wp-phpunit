@@ -14,16 +14,12 @@ SKIP_DB_CREATE=${6-false}
 
 TMPDIR=${TMPDIR-/tmp}
 TMPDIR=$(echo $TMPDIR | sed -e "s/\/$//")
-WP_TESTS_DIR=tmp/wordpress-tests-lib
-WP_CORE_DIR=tmp/wordpress
+PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+INSTALL_DIR="$( cd "$(dirname "$PARENT_DIR")" ; pwd -P )/tmp"
+WP_CORE_DIR="$INSTALL_DIR/wordpress"
+WP_TESTS_DIR="$INSTALL_DIR/wordpress-tests-lib"
 
-download() {
-    if [ `which curl` ]; then
-        curl -s "$1" > "$2";
-    elif [ `which wget` ]; then
-        wget -nv -O "$2" "$1"
-    fi
-}
+. "$PARENT_DIR/generic-download-tools.sh"
 
 if [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+\-(beta|RC)[0-9]+$ ]]; then
 	WP_BRANCH=${WP_VERSION%\-*}
@@ -33,7 +29,7 @@ elif [[ $WP_VERSION =~ ^[0-9]+\.[0-9]+$ ]]; then
 	WP_TESTS_TAG="branches/$WP_VERSION"
 elif [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 	if [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0] ]]; then
-		# version x.x.0 means the first release of the major version, so strip off the .0 and download version x.x
+		# Version x.x.0 means the first release of the major version, so strip off the .0 and download version x.x.
 		WP_TESTS_TAG="tags/${WP_VERSION%??}"
 	else
 		WP_TESTS_TAG="tags/$WP_VERSION"
@@ -41,10 +37,10 @@ elif [[ $WP_VERSION =~ [0-9]+\.[0-9]+\.[0-9]+ ]]; then
 elif [[ $WP_VERSION == 'nightly' || $WP_VERSION == 'trunk' ]]; then
 	WP_TESTS_TAG="trunk"
 else
-	# http serves a single offer, whereas https serves multiple. we only want one
-	download http://api.wordpress.org/core/version-check/1.7/ /tmp/wp-latest.json
-	grep '[0-9]+\.[0-9]+(\.[0-9]+)?' /tmp/wp-latest.json
-	LATEST_VERSION=$(grep -o '"version":"[^"]*' /tmp/wp-latest.json | sed 's/"version":"//')
+	# Http serves a single offer, whereas https serves multiple. we only want one.
+	download http://api.wordpress.org/core/version-check/1.7/ $TMPDIR/wp-latest.json
+	grep '[0-9]+\.[0-9]+(\.[0-9]+)?' $TMPDIR/wp-latest.json
+	LATEST_VERSION=$(grep -o '"version":"[^"]*' $TMPDIR/wp-latest.json | sed 's/"version":"//')
 	if [[ -z "$LATEST_VERSION" ]]; then
 		echo "Latest WordPress version could not be found"
 		exit 1
@@ -53,8 +49,10 @@ else
 fi
 set -ex
 
-install_wp() {
-
+# Installs WordPress.
+#
+# Globals: LATEST_VERSION, TMPDIR, WP_CORE_DIR, WP_VERSION
+installWp() {
 	if [ -d $WP_CORE_DIR ]; then
 		return;
 	fi
@@ -95,7 +93,10 @@ install_wp() {
 	download https://raw.github.com/markoheijnen/wp-mysqli/master/db.php $WP_CORE_DIR/wp-content/db.php
 }
 
-install_test_suite() {
+# Installs WordPress' test suite.
+#
+# Globals: DB_HOST, DB_NAME, DB_PASS, DB_USER, WP_CORE_DIR, WP_TESTS_DIR, WP_TESTS_TAG
+installTestSuite() {
 	# portable in-place argument for both GNU sed and Mac OSX sed
 	if [[ $(uname -s) == 'Darwin' ]]; then
 		local ioption='-i.bak'
@@ -124,8 +125,10 @@ install_test_suite() {
 
 }
 
-install_db() {
-
+# Installs the database for the tests.
+#
+# Globals: DB_HOST, DB_NAME, DB_PASS, DB_USER, SKIP_DB_CREATE
+installDb() {
 	if [ ${SKIP_DB_CREATE} = "true" ]; then
 		return 0
 	fi
@@ -150,6 +153,6 @@ install_db() {
 	mysqladmin create $DB_NAME --user="$DB_USER" --password="$DB_PASS"$EXTRA
 }
 
-install_wp
-install_test_suite
-install_db
+installWp
+installTestSuite
+installDb

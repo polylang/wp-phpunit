@@ -1,0 +1,8 @@
+# Directories
+/.vscode
+/tmp
+/vendor
+
+# Files
+.DS_Store
+Thumbs.db
