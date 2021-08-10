@@ -9,6 +9,7 @@
 	},
 	"require": {
 		"php": ">=5.6",
+		"brain/monkey": "^2.0",
 		"cheprasov/php-cli-args": "^3.0",
 		"dealerdirect/phpcodesniffer-composer-installer": "*",
 		"phpunit/phpunit": "^7.5",
@@ -16,11 +17,14 @@
 		"symfony/console": "^4.4"
 	},
 	"autoload": {
+		"psr-4": {
+			"WP_Syntex\\Polylang_Phpunit\\": "UnitTests/"
+		},
 		"files": [
-			"../../../tmp/wordpress-tests-lib/includes/phpunit7/MockObject/Builder/NamespaceMatch.php",
-			"../../../tmp/wordpress-tests-lib/includes/phpunit7/MockObject/Builder/ParametersMatch.php",
-			"../../../tmp/wordpress-tests-lib/includes/phpunit7/MockObject/InvocationMocker.php",
-			"../../../tmp/wordpress-tests-lib/includes/phpunit7/MockObject/MockMethod.php"
+			"tmp/wordpress-tests-lib/includes/phpunit7/MockObject/Builder/NamespaceMatch.php",
+			"tmp/wordpress-tests-lib/includes/phpunit7/MockObject/Builder/ParametersMatch.php",
+			"tmp/wordpress-tests-lib/includes/phpunit7/MockObject/InvocationMocker.php",
+			"tmp/wordpress-tests-lib/includes/phpunit7/MockObject/MockMethod.php"
 		],
 		"exclude-from-classmap": [
 			"vendor/phpunit/phpunit/src/Framework/MockObject/Builder/NamespaceMatch.php",
