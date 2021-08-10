@@ -4,8 +4,16 @@
 	"license": "GPL-3.0-or-later",
 	"homepage": "https://polylang.pro",
 	"type": "library",
+	"config": {
+		"sort-packages": true
+	},
 	"require": {
-		"phpunit/phpunit": "^7.5"
+		"php": ">=5.6",
+		"cheprasov/php-cli-args": "^3.0",
+		"dealerdirect/phpcodesniffer-composer-installer": "*",
+		"phpunit/phpunit": "^7.5",
+		"roave/security-advisories": "dev-master",
+		"symfony/console": "^4.4"
 	},
 	"autoload": {
 		"files": [
@@ -20,5 +28,25 @@
 			"vendor/phpunit/phpunit/src/Framework/MockObject/InvocationMocker.php",
 			"vendor/phpunit/phpunit/src/Framework/MockObject/MockMethod.php"
 		]
+	},
+	"scripts": {
+		"install-suite": "bin/install-wp-tests.sh wordpress_tests root root 127.0.0.1:3306 latest",
+		"install-suite-nodb": "bin/install-wp-tests.sh wordpress_tests root root 127.0.0.1:3306 latest true",
+		"fix-suite": "php bin/fix-tests-suite.php",
+		"install-tests": [
+			"@install-suite",
+			"@fix-suite"
+		],
+		"install-tests-nodb": [
+			"@install-suite-nodb",
+			"@fix-suite"
+		]
+	},
+	"scripts-descriptions": {
+		"install-suite": "Installs the WordPress tests suite.",
+		"install-suite-nodb": "Installs the WordPress tests suite without creating the database.",
+		"fix-suite": "Fixes some small issues in the WordPress tests suite by performing some text replacements in the suite's files.",
+		"install-tests": "Installs and fixes the WordPress tests suite.",
+		"install-tests-nodb": "Installs and fixes the WordPress tests suite without creating the database."
 	}
 }
