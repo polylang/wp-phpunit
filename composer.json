@@ -12,9 +12,21 @@
 		"brain/monkey": "^2.0",
 		"cheprasov/php-cli-args": "^3.0",
 		"dealerdirect/phpcodesniffer-composer-installer": "*",
+		"php-stubs/woocommerce-stubs": "^5.5",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"phpunit/phpunit": "^7.5",
 		"roave/security-advisories": "dev-master",
-		"symfony/console": "^4.4"
+		"squizlabs/php_codesniffer": "^3.6",
+		"suin/phpcs-psr4-sniff": "^3.0",
+		"symfony/console": "^4.4",
+		"wp-coding-standards/wpcs": "^2.3",
+		"wpsyntex/polylang-phpstan": "dev-master",
+		"wpsyntex/polylang-stubs": "dev-master"
+	},
+	"require-dev": {
+		"php": "^7.1 || ^8.0",
+		"automattic/phpcs-neutron-standard": "*",
+		"automattic/vipwpcs": "*"
 	},
 	"autoload": {
 		"psr-4": {
@@ -34,6 +46,12 @@
 		]
 	},
 	"scripts": {
+		"cs": "vendor/bin/phpcs",
+		"stan": "vendor/bin/phpstan analyze --memory-limit=400M",
+		"lint": [
+			"@cs",
+			"@stan"
+		],
 		"install-suite": "bin/install-wp-tests.sh wordpress_tests root root 127.0.0.1:3306 latest",
 		"install-suite-nodb": "bin/install-wp-tests.sh wordpress_tests root root 127.0.0.1:3306 latest true",
 		"fix-suite": "php bin/fix-tests-suite.php",
@@ -47,6 +65,9 @@
 		]
 	},
 	"scripts-descriptions": {
+		"cs": "Runs PHPCS linter.",
+		"stan": "Runs PHPStan analysis.",
+		"lint": "Runs both PHPCS and PHPStan.",
 		"install-suite": "Installs the WordPress tests suite.",
 		"install-suite-nodb": "Installs the WordPress tests suite without creating the database.",
 		"fix-suite": "Fixes some small issues in the WordPress tests suite by performing some text replacements in the suite's files.",
