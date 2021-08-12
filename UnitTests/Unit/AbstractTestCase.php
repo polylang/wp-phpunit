@@ -33,7 +33,7 @@ abstract class AbstractTestCase extends PHPUnitTestCase {
 	 *
 	 * @return void
 	 */
-	protected function setUp() {
+	public function setUp() {
 		parent::setUp();
 		Monkey\setUp();
 
@@ -47,7 +47,7 @@ abstract class AbstractTestCase extends PHPUnitTestCase {
 	 *
 	 * @return void
 	 */
-	protected function tearDown() {
+	public function tearDown() {
 		unset( $GLOBALS['wpdb'] );
 
 		Monkey\tearDown();

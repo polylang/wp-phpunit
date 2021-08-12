@@ -21,7 +21,7 @@ trait TestCaseTrait {
 	/**
 	 * Replacement values for `getTestData()`.
 	 *
-	 * @var string[]|array[]
+	 * @var array<string|array<string>>
 	 */
 	protected $testDataReplacements = [
 		'tests'    => [ 'Integration', 'Unit' ],
