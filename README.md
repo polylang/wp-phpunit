@@ -87,13 +87,23 @@ require dirname( dirname( __DIR__ ) ) . '/vendor/wpsyntex/wp-phpunit/UnitTests/I
 bootstrapSuite(
     [
         'polylang-pro/polylang.php'                            => true,
-        'woocommerce/woocommerce.php'                          => 'withWoo',
+        'woocommerce/woocommerce.php'                          => [
+            'group' => 'withWoo',
+            'init'  => '\WP_Syntex\Polylang_Phpunit\Integration\initWoocommerce',
+        ],
+        'polylang-wc/polylang-wc.php'                          => 'withWoo',
         dirname( dirname( __DIR__ ) ) . '/polylang-foobar.php' => true,
-    ],
-    dirname( __DIR__ ),
-    '5.6.0'
+    ], // A list of plugins to include and activate.
+    dirname( __DIR__ ), // Path to the directory containing all tests.
+    '5.6.0' // The PHP version required to run this test suite.
 );
 ```
+
+The previous code will:
+
+- Require and trigger the activation hook for `polylang.php` and `polylang-foobar.php`.
+- Require and trigger the activation hook for `woocommerce.php` and `polylang-wc.php` if `--group=withWoo` is used when invoking phpunit.
+- Call `\WP_Syntex\Polylang_Phpunit\Integration\initWoocommerce` after `woocommerce.php` activation hook.
 
 #### Extend the abstract class in your integration tests
 
@@ -137,7 +147,7 @@ Some helpers are available in your tests, like toying with reflections or gettin
 
 #### Bootstrap for unit tests
 
-Example for your `bootstrap.php` file (unit tests):
+Example for your `bootstrap.php` file:
 
 ```php
 <?php
