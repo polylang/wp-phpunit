@@ -130,7 +130,7 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 		'setup_theme',
 		function () use ( $allPlugins, $wpPluginsDir, $wpThemesDir ) {
 			// Init callbacks.
-			foreach ( $allPlugins as $path => $initCallback ) {
+			foreach ( $allPlugins as $initCallback ) {
 				if ( ! empty( $initCallback ) ) {
 					call_user_func( $initCallback, $wpPluginsDir, $wpThemesDir ); // @phpstan-ignore-line
 				}
