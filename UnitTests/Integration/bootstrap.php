@@ -35,9 +35,9 @@ use WP_Syntex\Polylang_Phpunit\Bootstrap;
  * @return void
  */
 function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
-	$pllaiTestBootstrap = new Bootstrap( 'Integration', $testsDir, $phpVersion );
+	$bootstrap = new Bootstrap( 'Integration', $testsDir, $phpVersion );
 
-	$pllaiTestBootstrap->initTestSuite();
+	$bootstrap->initTestSuite();
 
 	$wpPluginsDir = dirname( $testsDir ) . '/tmp/plugins/';
 	$wpThemesDir  = dirname( $testsDir ) . '/tmp/themes';
@@ -101,7 +101,7 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 		foreach ( $args['group'] as $group ) { // @phpstan-ignore-line
 			if ( ! isset( $groups[ $group ] ) ) {
 				// Put in cache.
-				$groups[ $group ] = $pllaiTestBootstrap->isGroup( $group );
+				$groups[ $group ] = $bootstrap->isGroup( $group );
 			}
 
 			if ( $groups[ $group ] ) {
@@ -129,19 +129,17 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 	tests_add_filter(
 		'setup_theme',
 		function () use ( $allPlugins, $wpPluginsDir, $wpThemesDir ) {
-			// Trigger plugins' activation hooks + init callbacks.
+			// Init callbacks.
 			foreach ( $allPlugins as $path => $initCallback ) {
 				if ( ! empty( $initCallback ) ) {
 					call_user_func( $initCallback, $wpPluginsDir, $wpThemesDir ); // @phpstan-ignore-line
 				}
-
-				do_action( 'activate_' . plugin_basename( $path ) );
 			}
 		}
 	);
 
 	// Start up the WP testing environment.
-	$pllaiTestBootstrap->bootstrapWpSuite();
+	$bootstrap->bootstrapWpSuite();
 }
 
 /**
