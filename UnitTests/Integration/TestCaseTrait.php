@@ -13,15 +13,15 @@ use PLL_Admin;
 use PLL_Admin_Default_Term;
 use PLL_Admin_Model;
 use PLL_Install;
-use WP_Syntex\Polylang_Phpunit\TestCaseTrait;
+use WP_Syntex\Polylang_Phpunit\TestCaseTrait as GlobalTestCaseTrait;
 use WP_UnitTest_Factory;
 use WP_UnitTestCase;
 
 /**
  * Test Case for all of the integration tests.
  */
-abstract class AbstractTestCase extends WP_UnitTestCase {
-	use TestCaseTrait;
+trait TestCaseTrait {
+	use GlobalTestCaseTrait;
 
 	/**
 	 * List of active plugins.

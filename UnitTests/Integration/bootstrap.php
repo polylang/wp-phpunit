@@ -31,9 +31,9 @@ use WP_Syntex\Polylang_Phpunit\Bootstrap;
  * @return void
  */
 function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
-	$pllaiTestBootstrap = new Bootstrap( 'Integration', $testsDir, $phpVersion );
+	$bootstrap = new Bootstrap( 'Integration', $testsDir, $phpVersion );
 
-	$pllaiTestBootstrap->initTestSuite();
+	$bootstrap->initTestSuite();
 
 	$wpPluginsDir = dirname( $testsDir ) . '/tmp/plugins/';
 	$allPlugins   = [];
@@ -65,7 +65,7 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 
 		foreach ( array_filter( $load ) as $group ) {
 			if ( ! isset( $groups[ $group ] ) ) {
-				$groups[ $group ] = $pllaiTestBootstrap->isGroup( $group );
+				$groups[ $group ] = $bootstrap->isGroup( $group );
 			}
 
 			if ( $groups[ $group ] ) {
@@ -95,14 +95,7 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 
 	tests_add_filter(
 		'setup_theme',
-		function () use ( $wpPluginsDir, $plugins, $groups ) {
-			// Trigger plugins' activation hooks.
-			foreach ( $plugins as $path => $load ) {
-				if ( $load ) {
-					do_action( 'activate_' . plugin_basename( $path ) );
-				}
-			}
-
+		function () use ( $wpPluginsDir, $groups ) {
 			// some custom inits.
 			if ( ! empty( $groups['withWoo'] ) ) {
 				initWoocommerce( $wpPluginsDir );
@@ -111,7 +104,7 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 	);
 
 	// Start up the WP testing environment.
-	$pllaiTestBootstrap->bootstrapWpSuite();
+	$bootstrap->bootstrapWpSuite();
 }
 
 /**

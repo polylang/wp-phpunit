@@ -227,7 +227,7 @@ class Bootstrap {
 		if ( ! $phpversion || version_compare( $phpversion, $this->phpVersion ) < 0 ) {
 			trigger_error(
 				sprintf(
-					'Unit Tests for Polylang for WP All Import require PHP %s or higher.',
+					'Unit Tests for this project require PHP %s or higher.',
 					$this->phpVersion // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				),
 				E_USER_ERROR
