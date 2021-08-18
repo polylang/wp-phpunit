@@ -15,20 +15,6 @@
 		"roave/security-advisories": "dev-master",
 		"symfony/console": "^4.4"
 	},
-	"autoload": {
-		"files": [
-			"../../../tmp/wordpress-tests-lib/includes/phpunit7/MockObject/Builder/NamespaceMatch.php",
-			"../../../tmp/wordpress-tests-lib/includes/phpunit7/MockObject/Builder/ParametersMatch.php",
-			"../../../tmp/wordpress-tests-lib/includes/phpunit7/MockObject/InvocationMocker.php",
-			"../../../tmp/wordpress-tests-lib/includes/phpunit7/MockObject/MockMethod.php"
-		],
-		"exclude-from-classmap": [
-			"vendor/phpunit/phpunit/src/Framework/MockObject/Builder/NamespaceMatch.php",
-			"vendor/phpunit/phpunit/src/Framework/MockObject/Builder/ParametersMatch.php",
-			"vendor/phpunit/phpunit/src/Framework/MockObject/InvocationMocker.php",
-			"vendor/phpunit/phpunit/src/Framework/MockObject/MockMethod.php"
-		]
-	},
 	"scripts": {
 		"install-tests": "bin/install-wp-suite.sh",
 		"install-tests-with-db": "bin/install-wp-suite.sh latest true"
