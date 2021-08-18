@@ -2,18 +2,19 @@
 # Builds the project (Composer, npm).
 #
 # $1 string Whether to run composer install or update. '-u' or '--update' to update, anything else to install.
-# $2 int    1 to run npm. 0 otherwize.
-
-COMPOSER_COMMAND='install'
+# $2 string '--no-npm' to not run npm.
 
 if [[ "$1" = "-u" ]] || [[ "$1" = "--update" ]]; then
-	COMPOSER_COMMAND='update'
+	local COMPOSER_COMMAND='update'
+else
+	local COMPOSER_COMMAND='install'
 fi
 
 echo "Installing PHP packages..."
+rm -rf vendor/ # Make sure to remove all traces of development dependencies.
 composer $COMPOSER_COMMAND # Need update to ensure to have the latest version of the dependencies.
 
-if [[ $2 ]]; then
+if [[ '--no-npm' != $2 ]]; then
 	echo "Running build..."
 	npm install && npm run build # minify js and css files.
 fi

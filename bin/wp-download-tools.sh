@@ -106,7 +106,7 @@ site $PLUGIN_SLUG:{YOUR-SITE}"
 		return
 	fi
 
-	local LICENSE=$(getLicenseCode $PLUGIN_SLUG)
+	local LICENSE=$(getLicenseValue "license $PLUGIN_SLUG")
 
 	if [[ ! $LICENSE ]]; then
 		# No license key.
@@ -114,7 +114,7 @@ site $PLUGIN_SLUG:{YOUR-SITE}"
 		return
 	fi
 
-	local SITE=$(getLicenseSite $PLUGIN_SLUG)
+	local SITE=$(getLicenseValue "site $PLUGIN_SLUG")
 	local PARAMS="edd_action=get_version&license=$LICENSE&url=$SITE&item_name=$PLUGIN_NAME&version=0.1"
 	local HEADERS='Content-Type: application/x-www-form-urlencoded;Cache-Control: no-cache;Accept: application/json;Connection: keep-alive'
 
@@ -268,28 +268,15 @@ downloadThemeFromRepository() {
 	fi ;
 }
 
-# Returns the license code for the given plugin or theme.
-# The code is fetched from the `LICENSE-CODES` file.
+# Returns the value of the given license data.
+# The data are fetched from the `LICENSE-CODES` file.
 #
 # Globals: WORKING_DIR
 #
-# $1     string A plugin or theme slug.
+# $1     string A license data name.
 # return string
-getLicenseCode() {
-	local LICENSE=$(grep -Eo "license $1:[a-f0-9]+" $WORKING_DIR/LICENSE-CODES)
-	echo ${LICENSE/license $1:}
-}
-
-# Returns the site URL registered with the license for the given plugin or theme.
-# The site URL is fetched from the `LICENSE-CODES` file.
-#
-# Globals: WORKING_DIR
-#
-# $1     string A plugin or theme slug.
-# return string
-getLicenseSite() {
-	local SITE=$(grep -Eo "site $1:[^[:space:]]+" $WORKING_DIR/LICENSE-CODES)
-	echo ${SITE/site $1:}
+getLicenseValue() {
+	echo $(grep -Eo "^$1[[:space:]]*:[[:space:]]*[^[:space:]]+[[:space:]]*$" $WORKING_DIR/LICENSE-CODES | sed -e "s/^$1[[:space:]]*:[[:space:]]*//" -e 's/[[:space:]]*$//')
 }
 
 # Returns the package URL from the given contents.
