@@ -8,9 +8,8 @@
 
 namespace WP_Syntex\Polylang_Phpunit\Integration;
 
-use Automattic\WooCommerce\Admin\Install as WooInstall;
-use WC_Install;
 use WP_Syntex\Polylang_Phpunit\Bootstrap;
+use WP_Syntex\Polylang_Phpunit\Integration\WooCommerce\Bootstrap as WooBootstrap;
 
 /**
  * Bootstraps the integration testing environment with WordPress, PLL AI, and other dependencies.
@@ -169,33 +168,4 @@ function pathIsAbsolute( $path ) {
 
 	// A path starting with / or \ is absolute; anything else is relative.
 	return ( '/' === $path[0] || '\\' === $path[0] );
-}
-
-/**
- * Init WooCommerce (database, etc).
- *
- * @param  string $pluginsDir Path to the WP plugins dir.
- * @return void
- */
-function initWoocommerce( $pluginsDir ) {
-	if ( defined( 'WP_UNINSTALL_PLUGIN' ) ) {
-		return;
-	}
-
-	// Clean existing install first.
-	define( 'WP_UNINSTALL_PLUGIN', true );
-	define( 'WC_REMOVE_ALL_DATA', true );
-
-	include $pluginsDir . 'woocommerce/uninstall.php';
-
-	WC_Install::install();
-
-	// Initialize the WC Admin package.
-	WooInstall::create_tables();
-	WooInstall::create_events();
-
-	$GLOBALS['wp_roles'] = null;
-	wp_roles();
-
-	echo esc_html( 'Installing WooCommerce...' . PHP_EOL );
 }

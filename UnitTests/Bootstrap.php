@@ -85,6 +85,11 @@ class Bootstrap {
 		$this->checkReadiness();
 		$this->initConstants();
 
+		// Ensure server variable is set for WP email functions.
+		if ( ! isset( $_SERVER['SERVER_NAME'] ) ) {
+			$_SERVER['SERVER_NAME'] = 'localhost';
+		}
+
 		// Load Patchwork before everything else in order to allow us to redefine WordPress, 3rd party, and plugin's functions.
 		$patchworkPath = __DIR__ . '/../vendor/antecedent/patchwork/Patchwork.php';
 
