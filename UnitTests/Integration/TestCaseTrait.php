@@ -24,13 +24,6 @@ trait TestCaseTrait {
 	use GlobalTestCaseTrait;
 
 	/**
-	 * List of active plugins.
-	 *
-	 * @var array<string>
-	 */
-	protected $activePlugins = [];
-
-	/**
 	 * Instance of PLL_Admin_Model.
 	 *
 	 * @var PLL_Admin_Model
@@ -69,6 +62,11 @@ trait TestCaseTrait {
 	public function setUp() {
 		parent::setUp();
 
+		/**
+		 * `$this->activePlugins` must be an array of paths to plugin files, relative to the plugins directory.
+		 *
+		 * @var array<string>
+		 */
 		if ( ! empty( $this->activePlugins ) ) {
 			add_filter( 'pre_option_active_plugins', [ $this, 'filterActivePlugins' ] );
 		}
