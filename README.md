@@ -112,7 +112,7 @@ bootstrapSuite(
         'polylang-pro/polylang.php'                            => true,
         'woocommerce/woocommerce.php'                          => [
             'group' => 'withWoo',
-            'init'  => '\WP_Syntex\Polylang_Phpunit\Integration\initWoocommerce',
+            'init'  => '\WP_Syntex\Polylang_Phpunit\Integration\WooCommerce\Bootstrap::initWoocommerce',
         ],
         'polylang-wc/polylang-wc.php'                          => 'withWoo',
         dirname( dirname( __DIR__ ) ) . '/polylang-foobar.php' => true,
