@@ -11,6 +11,9 @@ namespace WP_Syntex\Polylang_Phpunit\Integration\WooCommerce;
 use Automattic\WooCommerce\Admin\Install as WooInstall;
 use WC_Install;
 
+/**
+ * Bootstrap class when using WooComerce.
+ */
 class Bootstrap {
 
 	/**
@@ -51,7 +54,8 @@ class Bootstrap {
 	public static function includeWooCommerceSuite( $pluginsDir ) {
 		add_theme_support( 'woocommerce' );
 
-		$testsDir = $pluginsDir . 'woocommerce/tests' . version_compare( WC()->version, '4.2', '<' ) ? '' : '/legacy';
+		$testsDir = version_compare( WC()->version, '4.2' ) < 0 ? '' : '/legacy';
+		$testsDir = "{$pluginsDir}woocommerce/tests{$testsDir}";
 
 		// woocommerce/framework.
 		require_once $testsDir . '/framework/class-wc-unit-test-factory.php';

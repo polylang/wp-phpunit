@@ -6,8 +6,7 @@ A code library for WP Syntex projects, containing:
 - scripts to install the required plugins and themes,
 - scripts for building and distributing the project,
 - bootstraps allowing to init unit and integration tests,
-- helpers for the tests,
-- rulesets enforcing our conventions (phpcs): custom rules (Generic, PSR2, Squiz), Suin, WordPress.
+- helpers for the tests.
 
 ## How to
 
@@ -206,45 +205,6 @@ protected static $mockCommonWpFunctionsInSetUp = true;
 ```
 
 Like for integration tests, some helpers are available in your tests, from the `TestCaseTrait` trait.
-
-### PHPCS
-
-Example for your `phpcs.xml.dist` file:
-
-```xml
-<?xml version="1.0"?>
-<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Polylang Foobar" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/squizlabs/PHP_CodeSniffer/master/phpcs.xsd">
-    <description>Coding standards for Polylang Foobar.</description>
-
-    <arg value="p"/><!-- Shows progress. -->
-    <arg name="colors"/><!-- Shows results with colors. -->
-    <arg name="extensions" value="php"/><!-- Limits to PHP files. -->
-
-    <!-- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage -->
-    <file>.</file>
-    <exclude-pattern>bin/*</exclude-pattern>
-    <exclude-pattern>src/Dependencies/*</exclude-pattern>
-    <exclude-pattern>tmp/*</exclude-pattern>
-    <exclude-pattern>vendor/*</exclude-pattern>
-
-    <!-- Run against the PHPCompatibility ruleset: PHP 5.6 and higher + WP 5.4 and higher. -->
-    <!-- https://github.com/PHPCompatibility/PHPCompatibilityWP -->
-    <rule ref="PHPCompatibilityWP"/>
-    <config name="testVersion" value="5.6-"/>
-    <config name="minimum_supported_wp_version" value="5.4"/>
-
-    <!-- Our own ruleset. -->
-    <rule ref="vendor/wpsyntex/wp-phpunit/phpcs/ruleset.xml">
-        <exclude name="Squiz.PHP.CommentedOutCode.Found"/>
-        <exclude name="WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize"/>
-    </rule>
-
-    <!-- Run against the PSR-4 ruleset. -->
-    <!-- https://github.com/suin/phpcs-psr4-sniff -->
-    <arg name="basepath" value="."/>
-</ruleset>
-
-```
 
 ### PHPStan
 

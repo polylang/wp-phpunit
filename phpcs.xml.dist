@@ -8,14 +8,6 @@
 
 	<!-- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage -->
 	<file>.</file>
-	<exclude-pattern>bin/*</exclude-pattern>
-	<exclude-pattern>tmp/*</exclude-pattern>
-	<exclude-pattern>vendor/*</exclude-pattern>
-
-	<!-- Run against the PHPCompatibility ruleset: PHP 5.6 and higher. -->
-	<!-- https://github.com/PHPCompatibility/PHPCompatibilityWP -->
-	<rule ref="PHPCompatibilityWP"/>
-	<config name="testVersion" value="5.6-"/>
 
 	<!-- Run against custom rules. -->
 	<rule ref="Generic.Arrays.ArrayIndent"/>
@@ -47,7 +39,7 @@
 	</rule>
 
 	<!-- Our own ruleset. -->
-	<rule ref="./phpcs/ruleset.xml">
+	<rule ref="Polylang">
 		<exclude name="Squiz.PHP.CommentedOutCode.Found"/>
 		<exclude name="WordPress.PHP.DevelopmentFunctions.error_log_trigger_error"/>
 		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize"/>

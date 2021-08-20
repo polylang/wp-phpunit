@@ -4,29 +4,31 @@
 	"license": "GPL-3.0-or-later",
 	"homepage": "https://polylang.pro",
 	"type": "library",
+	"minimum-stability": "dev",
 	"config": {
 		"sort-packages": true
 	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/polylang/polylang-cs"
+		}
+	],
 	"require": {
 		"php": ">=5.6",
 		"brain/monkey": "^2.0",
 		"cheprasov/php-cli-args": "^3.0",
-		"dealerdirect/phpcodesniffer-composer-installer": "*",
 		"php-stubs/woocommerce-stubs": "^5.5",
-		"phpcompatibility/phpcompatibility-wp": "^2.1",
 		"phpunit/phpunit": "^5.7",
-		"roave/security-advisories": "dev-master",
-		"squizlabs/php_codesniffer": "^3.6",
-		"suin/phpcs-psr4-sniff": "^3.0",
 		"symfony/console": "^4.4",
-		"wp-coding-standards/wpcs": "^2.3",
 		"wpsyntex/polylang-phpstan": "dev-master",
 		"wpsyntex/polylang-stubs": "dev-master"
 	},
 	"require-dev": {
 		"php": "^7.1 || ^8.0",
 		"automattic/phpcs-neutron-standard": "*",
-		"automattic/vipwpcs": "*"
+		"automattic/vipwpcs": "*",
+		"wpsyntex/polylang-cs": "dev-first-shot"
 	},
 	"autoload": {
 		"psr-4": {
