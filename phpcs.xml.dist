@@ -20,30 +20,13 @@
 	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
 	<rule ref="Squiz.WhiteSpace.ControlStructureSpacing.NoLineAfterClose"/>
 
-	<!-- Run against WordPress VIP ruleset. -->
-	<!-- https://github.com/Automattic/VIP-Coding-Standards -->
-	<rule ref="WordPressVIPMinimum">
-		<exclude name="WordPressVIPMinimum.Files.IncludingFile.UsingVariable"/>
-	</rule>
-
-	<!-- Run against the NeutronStandard ruleset. -->
-	<!-- https://github.com/Automattic/phpcs-neutron-standard -->
-	<rule ref="NeutronStandard">
-		<exclude name="NeutronStandard.AssignAlign.DisallowAssignAlign.Aligned"/>
-		<exclude name="NeutronStandard.Constants.DisallowDefine.Define"/>
-		<exclude name="NeutronStandard.Functions.DisallowCallUserFunc.CallUserFunc"/>
-		<exclude name="NeutronStandard.Functions.LongFunction.LongFunction"/>
-		<exclude name="NeutronStandard.Functions.TypeHint.NoArgumentType"/>
-		<exclude name="NeutronStandard.Functions.TypeHint.NoReturnType"/>
-		<exclude name="NeutronStandard.StrictTypes.RequireStrictTypes.StrictTypes"/>
-	</rule>
-
 	<!-- Our own ruleset. -->
 	<rule ref="Polylang">
 		<exclude name="Squiz.PHP.CommentedOutCode.Found"/>
 		<exclude name="WordPress.PHP.DevelopmentFunctions.error_log_trigger_error"/>
 		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize"/>
 		<exclude name="WordPress.WP.GlobalVariablesOverride.Prohibited"/>
+		<exclude name="WordPressVIPMinimum.Files.IncludingFile.UsingVariable"/>
 	</rule>
 
 	<!-- Run against the PSR-4 ruleset. -->
