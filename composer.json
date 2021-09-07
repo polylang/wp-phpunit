@@ -9,11 +9,17 @@
 	},
 	"require": {
 		"php": ">=5.6",
+		"brain/monkey": "^2.0",
 		"cheprasov/php-cli-args": "^3.0",
 		"dealerdirect/phpcodesniffer-composer-installer": "*",
 		"phpunit/phpunit": "^5.7",
 		"roave/security-advisories": "dev-master",
 		"symfony/console": "^4.4"
+	},
+	"autoload": {
+		"psr-4": {
+			"WP_Syntex\\Polylang_Phpunit\\": "UnitTests/"
+		}
 	},
 	"scripts": {
 		"install-tests": "bin/install-wp-suite.sh",
