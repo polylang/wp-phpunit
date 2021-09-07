@@ -102,7 +102,9 @@ downloadPluginFromEdd() {
 		# No license code.
 		formatMessage "${ERROR_C}$PLUGIN_SLUG's license not provided.${NO_C} Please create a file named LICENSE-CODES containing the license code and the registered site (the site may not be required) with this format:
 license $PLUGIN_SLUG:{YOUR-LICENSE}
-site $PLUGIN_SLUG:{YOUR-SITE}"
+site $PLUGIN_SLUG:{YOUR-SITE}
+If $PLUGIN_SLUG doesn't require a license key, do the following:
+license $PLUGIN_SLUG:none"
 		return
 	fi
 
@@ -112,6 +114,11 @@ site $PLUGIN_SLUG:{YOUR-SITE}"
 		# No license key.
 		formatMessage "${ERROR_C}No license key found for $PLUGIN_SLUG in the file LICENSE-CODES.${NO_C}"
 		return
+	fi
+
+	if [[ 'none' == $LICENSE ]]; then
+		# Allow to get a plugin that doesn't require a license key.
+		LICENSE=''
 	fi
 
 	local SITE=$(getLicenseValue "site $PLUGIN_SLUG")
@@ -128,7 +135,8 @@ site $PLUGIN_SLUG:{YOUR-SITE}"
 
 	if [[ ! $URL ]]; then
 		# Could not get the package URL.
-		formatMessage "${ERROR_C}Could not get $PLUGIN_SLUG's package URL.${NO_C}"
+		local MSG=$(getPackageMsg "$INFO")
+		formatMessage "${ERROR_C}Could not get $PLUGIN_SLUG's package URL:${NO_C} $MSG"
 		return
 	fi
 
@@ -277,6 +285,14 @@ downloadThemeFromRepository() {
 # return string
 getLicenseValue() {
 	echo $(grep -Eo "^$1[[:space:]]*:[[:space:]]*[^[:space:]]+[[:space:]]*$" $WORKING_DIR/LICENSE-CODES | sed -e "s/^$1[[:space:]]*:[[:space:]]*//" -e 's/[[:space:]]*$//')
+}
+
+# Returns the package message from the given contents.
+#
+# $1     string Some contents.
+# return string
+getPackageMsg() {
+	echo "$1" | grep -Eo '"msg":".+?"' | sed -e 's/^"msg":"//' -e 's/"$//'
 }
 
 # Returns the package URL from the given contents.
