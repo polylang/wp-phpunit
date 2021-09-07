@@ -58,7 +58,12 @@ license {PLUGIN-SLUG}:{YOUR-LICENSE}
 site {PLUGIN-SLUG}:{YOUR-SITE}
 ```
 
-Depending on EDD config, the `site` line may not be required.
+Depending on EDD config, the `site` line may not be required.  
+Also, if your plugin from EDD doesn't require a license key, do the following:
+
+```txt
+license {PLUGIN-SLUG}:none
+```
 
 ### Composer scripts
 
