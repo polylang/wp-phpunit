@@ -58,7 +58,12 @@ license {PLUGIN-SLUG}:{YOUR-LICENSE}
 site {PLUGIN-SLUG}:{YOUR-SITE}
 ```
 
-Depending on EDD config, the `site` line may not be required.
+Depending on EDD config, the `site` line may not be required.  
+Also, if your plugin from EDD doesn't require a license key, do the following:
+
+```txt
+license {PLUGIN-SLUG}:none
+```
 
 ### Composer scripts
 
@@ -113,7 +118,9 @@ bootstrapSuite(
             'group' => 'withWoo',
             'init'  => '\WP_Syntex\Polylang_Phpunit\Integration\WooCommerce\Bootstrap::initWoocommerce',
         ],
-        'polylang-wc/polylang-wc.php'                          => 'withWoo',
+        'polylang-wc/polylang-wc.php'                          => [
+            'group' => 'withWoo',
+        ],
         dirname( dirname( __DIR__ ) ) . '/polylang-foobar.php' => true,
     ], // A list of plugins to include and activate.
     dirname( __DIR__ ), // Path to the directory containing all tests.
@@ -123,9 +130,9 @@ bootstrapSuite(
 
 The previous code will:
 
-- Require and trigger the activation hook for `polylang.php` and `polylang-foobar.php`.
-- Require and trigger the activation hook for `woocommerce.php` and `polylang-wc.php` if `--group=withWoo` is used when invoking phpunit.
-- Call `\WP_Syntex\Polylang_Phpunit\Integration\initWoocommerce` after `woocommerce.php` activation hook.
+- Require `polylang.php` and `polylang-foobar.php`.
+- Require `woocommerce.php` and `polylang-wc.php` if `--group=withWoo` is used when invoking phpunit.
+- Call `\WP_Syntex\Polylang_Phpunit\Integration\WooCommerce\Bootstrap::initWoocommerce()` after `woocommerce.php` is required.
 
 #### Extend the abstract class in your integration tests
 
@@ -207,6 +214,12 @@ protected static $mockCommonWpFunctionsInSetUp = true;
 Like for integration tests, some helpers are available in your tests, from the `TestCaseTrait` trait.
 
 ### PHPStan
+
+Since this project contains some PHPStan-related packages, you can use a few things directly:
+
+- `php-stubs/woocommerce-stubs`,
+- `wpsyntex/polylang-phpstan`,
+- `wpsyntex/polylang-stubs`.
 
 Example for your `phpstan.neon.dist` file:
 

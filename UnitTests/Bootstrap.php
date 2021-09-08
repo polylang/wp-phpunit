@@ -90,6 +90,10 @@ class Bootstrap {
 			$_SERVER['SERVER_NAME'] = 'localhost';
 		}
 
+		if ( 'Integration' !== $this->suite ) {
+			return;
+		}
+
 		// Load Patchwork before everything else in order to allow us to redefine WordPress, 3rd party, and plugin's functions.
 		$patchworkPath = __DIR__ . '/../vendor/antecedent/patchwork/Patchwork.php';
 
@@ -98,9 +102,7 @@ class Bootstrap {
 		}
 
 		// Give access to tests_add_filter() function.
-		if ( 'Integration' === $this->suite ) {
-			require_once $this->getWpTestsDir() . '/includes/functions.php';
-		}
+		require_once $this->getWpTestsDir() . '/includes/functions.php';
 	}
 
 	/**

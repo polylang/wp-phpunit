@@ -14,23 +14,20 @@ use WP_Syntex\Polylang_Phpunit\Integration\WooCommerce\Bootstrap as WooBootstrap
 /**
  * Bootstraps the integration testing environment with WordPress, PLL AI, and other dependencies.
  *
- * @param  array<bool|string|array<string|callable>> $plugins {
+ * @param  array<bool|array<string|callable>> $plugins    {
  *     A list of plugins to include and activate.
  *     Array keys are paths to the plugin's main file. The paths can be absolute, or relative to the plugins directory.
  *
- *     @type bool|string|array<string> Values tell if the plugin must be included or not and can be:
+ *     @type bool|array<string|callable> Values tell if the plugin must be included or not and can be:
  *       - bool: whether to include and activate the plugin or not.
- *       - string: the name of a test group. The plugin will be included and activated only if the tests run this group.
- *         Can also be a list of groups, separated by commas: the plugin will be included and activated if the tests run
- *         at least one of these groups.
  *       - array: {
- *             @type string   $group A group or a list of groups, separated by commas. Similar to previous string
- *                                   format. Optional.
+ *             @type string   $group A group or a list of groups, separated by commas. The plugin will be included and
+ *                                   activated only if the tests run at least one of these groups. Optional.
  *             @type callable $init  A callback to executed after all plugins are included. Optional.
  *         }
  * }
- * @param  string                                    $testsDir         Path to the directory containing all tests.
- * @param  string                                    $phpVersion       The PHP version required to run this test suite.
+ * @param  string                             $testsDir   Path to the directory containing all tests.
+ * @param  string                             $phpVersion The PHP version required to run this test suite.
  * @return void
  */
 function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
@@ -63,13 +60,8 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 			continue;
 		}
 
-		if ( is_string( $args ) ) {
-			// Group name.
-			$args = [
-				'group' => $args,
-			];
-		} elseif ( ! is_array( $args ) ) {
-			// Only bool, string and array are allowed.
+		if ( ! is_array( $args ) ) {
+			// Only bool, array are allowed.
 			continue;
 		}
 

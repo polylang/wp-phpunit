@@ -54,8 +54,7 @@ class Bootstrap {
 	public static function includeWooCommerceSuite( $pluginsDir ) {
 		add_theme_support( 'woocommerce' );
 
-		$testsDir = version_compare( WC()->version, '4.2' ) < 0 ? '' : '/legacy';
-		$testsDir = "{$pluginsDir}woocommerce/tests{$testsDir}";
+		$testsDir = $pluginsDir . 'woocommerce/tests/legacy';
 
 		// woocommerce/framework.
 		require_once $testsDir . '/framework/class-wc-unit-test-factory.php';

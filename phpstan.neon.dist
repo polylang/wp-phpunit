@@ -9,7 +9,6 @@ parameters:
 		- tmp/wordpress-tests-lib/includes/testcase.php
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-packages-stubs.php
-		- vendor/wpsyntex/polylang-stubs/polylang-stubs.php
 	scanDirectories:
 		- tmp/wordpress-tests-lib/includes
 	ignoreErrors:
