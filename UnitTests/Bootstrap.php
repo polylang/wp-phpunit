@@ -90,19 +90,24 @@ class Bootstrap {
 			$_SERVER['SERVER_NAME'] = 'localhost';
 		}
 
-		if ( 'Integration' !== $this->suite ) {
-			return;
+		if ( 'Unit' === $this->suite ) {
+			/**
+			 * Unit tests:
+			 * Load Patchwork before everything else in order to allow us to redefine WordPress, 3rd party, and plugin's
+			 * functions.
+			 */
+			$patchworkPath = __DIR__ . '/../vendor/antecedent/patchwork/Patchwork.php';
+
+			if ( file_exists( $patchworkPath ) ) {
+				require_once $patchworkPath;
+			}
+		} else {
+			/**
+			 * Integration tests:
+			 * Give access to tests_add_filter() function.
+			 */
+			require_once $this->getWpTestsDir() . '/includes/functions.php';
 		}
-
-		// Load Patchwork before everything else in order to allow us to redefine WordPress, 3rd party, and plugin's functions.
-		$patchworkPath = __DIR__ . '/../vendor/antecedent/patchwork/Patchwork.php';
-
-		if ( file_exists( $patchworkPath ) ) {
-			require_once $patchworkPath;
-		}
-
-		// Give access to tests_add_filter() function.
-		require_once $this->getWpTestsDir() . '/includes/functions.php';
 	}
 
 	/**

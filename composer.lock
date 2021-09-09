@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a6034b786ca1e6dfe6d420d35221ef6c",
+    "content-hash": "e739fee79e857aabcaedd5cce76887e4",
     "packages": [
         {
             "name": "antecedent/patchwork",
@@ -419,7 +419,7 @@
         },
         {
             "name": "php-stubs/woocommerce-stubs",
-            "version": "v5.6.0",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-stubs/woocommerce-stubs.git",
@@ -442,6 +442,7 @@
                 "symfony/polyfill-php73": "Symfony polyfill backporting some PHP 7.3+ features to lower PHP versions",
                 "szepeviktor/phpstan-wordpress": "WordPress extensions for PHPStan"
             },
+            "default-branch": true,
             "type": "library",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -735,12 +736,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "5604593b002a836e359d121b6da8bf7aadc3e74c"
+                "reference": "ffabce286f0989b07886e21ab90fcfa97aede5ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5604593b002a836e359d121b6da8bf7aadc3e74c",
-                "reference": "5604593b002a836e359d121b6da8bf7aadc3e74c",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ffabce286f0989b07886e21ab90fcfa97aede5ab",
+                "reference": "ffabce286f0989b07886e21ab90fcfa97aede5ab",
                 "shasum": ""
             },
             "require": {
@@ -792,7 +793,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-08T12:15:49+00:00"
+            "time": "2021-09-08T17:31:44+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2986,12 +2987,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "2253b042c4cf1a9413f44a1c224ef2f705517bfb"
+                "reference": "07bff2dda1a042b95afcbdb1542e6123829a4ed6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/2253b042c4cf1a9413f44a1c224ef2f705517bfb",
-                "reference": "2253b042c4cf1a9413f44a1c224ef2f705517bfb",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/07bff2dda1a042b95afcbdb1542e6123829a4ed6",
+                "reference": "07bff2dda1a042b95afcbdb1542e6123829a4ed6",
                 "shasum": ""
             },
             "conflict": {
@@ -3080,7 +3081,7 @@
                 "flarum/tags": "<=0.1-beta.13",
                 "fluidtypo3/vhs": "<5.1.1",
                 "fooman/tcpdf": "<6.2.22",
-                "forkcms/forkcms": "<5.8.3",
+                "forkcms/forkcms": "<=5.9.2",
                 "fossar/tcpdf-parser": "<6.2.22",
                 "francoisjacquet/rosariosis": "<6.5.1",
                 "friendsofsymfony/oauth2-php": "<1.3",
@@ -3207,7 +3208,7 @@
                 "shopware/core": "<=6.4.3",
                 "shopware/platform": "<=6.4.3",
                 "shopware/production": "<=6.3.5.2",
-                "shopware/shopware": "<=5.6.9",
+                "shopware/shopware": "<5.6.10",
                 "showdoc/showdoc": "<=2.9.8",
                 "silverstripe/admin": ">=1.0.3,<1.0.4|>=1.1,<1.1.1",
                 "silverstripe/assets": ">=1,<1.4.7|>=1.5,<1.5.2",
@@ -3235,6 +3236,7 @@
                 "ssddanbrown/bookstack": "<0.29.2",
                 "stormpath/sdk": ">=0,<9.9.99",
                 "studio-42/elfinder": "<2.1.59",
+                "subrion/cms": "<=4.2.1",
                 "sulu/sulu": "<1.6.41|>=2,<2.0.10|>=2.1,<2.1.1",
                 "swiftmailer/swiftmailer": ">=4,<5.4.5",
                 "sylius/admin-bundle": ">=1,<1.0.17|>=1.1,<1.1.9|>=1.2,<1.2.2",
@@ -3375,7 +3377,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-07T23:02:49+00:00"
+            "time": "2021-09-08T18:03:47+00:00"
         },
         {
             "name": "sirbrillig/phpcs-variable-analysis",
@@ -3436,12 +3438,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/slevomat/coding-standard.git",
-                "reference": "34c73fb389cc6082369ec246b87b5d320a981160"
+                "reference": "ab145d96da5f675836621efcec16889d83994af4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/34c73fb389cc6082369ec246b87b5d320a981160",
-                "reference": "34c73fb389cc6082369ec246b87b5d320a981160",
+                "url": "https://api.github.com/repos/slevomat/coding-standard/zipball/ab145d96da5f675836621efcec16889d83994af4",
+                "reference": "ab145d96da5f675836621efcec16889d83994af4",
                 "shasum": ""
             },
             "require": {
@@ -3451,13 +3453,13 @@
                 "squizlabs/php_codesniffer": "^3.6.0"
             },
             "require-dev": {
-                "phing/phing": "2.16.4",
+                "phing/phing": "2.17.0",
                 "php-parallel-lint/php-parallel-lint": "1.3.1",
-                "phpstan/phpstan": "0.12.96",
+                "phpstan/phpstan": "0.12.98",
                 "phpstan/phpstan-deprecation-rules": "0.12.6",
                 "phpstan/phpstan-phpunit": "0.12.22",
                 "phpstan/phpstan-strict-rules": "0.12.11",
-                "phpunit/phpunit": "7.5.20|8.5.5|9.5.8"
+                "phpunit/phpunit": "7.5.20|8.5.5|9.5.9"
             },
             "default-branch": true,
             "type": "phpcodesniffer-standard",
@@ -3490,7 +3492,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-08-31T20:10:03+00:00"
+            "time": "2021-09-09T10:18:48+00:00"
         },
         {
             "name": "squizlabs/php_codesniffer",
