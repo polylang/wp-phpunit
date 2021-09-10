@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e739fee79e857aabcaedd5cce76887e4",
+    "content-hash": "b84902ce93be280154b4ea7d7c801633",
     "packages": [
         {
             "name": "antecedent/patchwork",
@@ -736,12 +736,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "ffabce286f0989b07886e21ab90fcfa97aede5ab"
+                "reference": "692a7d83b0b878ed4b70ccfe61f2416fe8492caa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ffabce286f0989b07886e21ab90fcfa97aede5ab",
-                "reference": "ffabce286f0989b07886e21ab90fcfa97aede5ab",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/692a7d83b0b878ed4b70ccfe61f2416fe8492caa",
+                "reference": "692a7d83b0b878ed4b70ccfe61f2416fe8492caa",
                 "shasum": ""
             },
             "require": {
@@ -793,7 +793,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-08T17:31:44+00:00"
+            "time": "2021-09-09T15:54:22+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -2987,12 +2987,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "07bff2dda1a042b95afcbdb1542e6123829a4ed6"
+                "reference": "8cebf1673eccd7e6552732142039c147c1023214"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/07bff2dda1a042b95afcbdb1542e6123829a4ed6",
-                "reference": "07bff2dda1a042b95afcbdb1542e6123829a4ed6",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/8cebf1673eccd7e6552732142039c147c1023214",
+                "reference": "8cebf1673eccd7e6552732142039c147c1023214",
                 "shasum": ""
             },
             "conflict": {
@@ -3099,6 +3099,7 @@
                 "grumpydictator/firefly-iii": "<5.6",
                 "guzzlehttp/guzzle": ">=4-rc.2,<4.2.4|>=5,<5.3.1|>=6,<6.2.1",
                 "helloxz/imgurl": "<=2.31",
+                "icecoder/icecoder": "<=8",
                 "illuminate/auth": ">=4,<4.0.99|>=4.1,<=4.1.31|>=4.2,<=4.2.22|>=5,<=5.0.35|>=5.1,<=5.1.46|>=5.2,<=5.2.45|>=5.3,<=5.3.31|>=5.4,<=5.4.36|>=5.5,<5.5.10",
                 "illuminate/cookie": ">=4,<=4.0.11|>=4.1,<=4.1.99999|>=4.2,<=4.2.99999|>=5,<=5.0.99999|>=5.1,<=5.1.99999|>=5.2,<=5.2.99999|>=5.3,<=5.3.99999|>=5.4,<=5.4.99999|>=5.5,<=5.5.49|>=5.6,<=5.6.99999|>=5.7,<=5.7.99999|>=5.8,<=5.8.99999|>=6,<6.18.31|>=7,<7.22.4",
                 "illuminate/database": "<6.20.26|>=7,<8.40",
@@ -3377,7 +3378,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-08T18:03:47+00:00"
+            "time": "2021-09-09T17:11:22+00:00"
         },
         {
             "name": "sirbrillig/phpcs-variable-analysis",
@@ -3663,12 +3664,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/polylang/polylang-cs.git",
-                "reference": "0d06e09c22fc91ce625010e2ab42b833012f4f34"
+                "reference": "efa2bb7a4e7c520caa3827c8bd8a88a00951620a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/polylang/polylang-cs/zipball/0d06e09c22fc91ce625010e2ab42b833012f4f34",
-                "reference": "0d06e09c22fc91ce625010e2ab42b833012f4f34",
+                "url": "https://api.github.com/repos/polylang/polylang-cs/zipball/efa2bb7a4e7c520caa3827c8bd8a88a00951620a",
+                "reference": "efa2bb7a4e7c520caa3827c8bd8a88a00951620a",
                 "shasum": ""
             },
             "require": {
@@ -3693,7 +3694,7 @@
                 "issues": "https://github.com/polylang/polylang-cs/issues",
                 "source": "https://github.com/polylang/polylang-cs/tree/main"
             },
-            "time": "2021-09-03T13:21:01+00:00"
+            "time": "2021-09-10T08:56:49+00:00"
         }
     ],
     "aliases": [],

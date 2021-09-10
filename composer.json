@@ -14,7 +14,7 @@
 		"cheprasov/php-cli-args": "^3.0",
 		"php-stubs/woocommerce-stubs": "*",
 		"phpunit/phpunit": "^5.7",
-		"symfony/console": "^4.4",
+		"symfony/console": "^3.4 || ^4.4",
 		"wpsyntex/polylang-phpstan": "dev-master",
 		"wpsyntex/polylang-stubs": "dev-master"
 	},

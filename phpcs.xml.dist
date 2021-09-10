@@ -9,17 +9,6 @@
 	<!-- https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage -->
 	<file>.</file>
 
-	<!-- Run against custom rules. -->
-	<rule ref="Generic.Arrays.ArrayIndent"/>
-	<rule ref="Generic.WhiteSpace.IncrementDecrementSpacing"/>
-	<rule ref="Generic.WhiteSpace.LanguageConstructSpacing"/>
-	<rule ref="PEAR.Commenting.FileComment.MissingVersion"/>
-	<rule ref="PEAR.Functions.FunctionDeclaration.SpaceAfterFunction"/>
-	<rule ref="Squiz.Commenting.LongConditionClosingComment.Missing"/>
-	<rule ref="Squiz.ControlStructures.SwitchDeclaration.MissingDefault"/>
-	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction"/>
-	<rule ref="Squiz.WhiteSpace.ControlStructureSpacing.NoLineAfterClose"/>
-
 	<!-- Our own ruleset. -->
 	<rule ref="Polylang">
 		<exclude name="WordPress.PHP.DevelopmentFunctions.error_log_trigger_error"/>
