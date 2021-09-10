@@ -44,12 +44,16 @@ installWpSuite() {
 		local DB_HOST=$(getConfigValue 'db_host' 'localhost')
 		local DB_NAME=$(getConfigValue 'db_name' 'wordpress_tests')
 		local DB_USER=$(getConfigValue 'db_user' 'root')
-		local DB_PASS=$(getConfigValue 'db_pass' 'root')
+		local DB_PASS=$(getConfigValue 'db_pass' '')
 	else
 		local DB_HOST='localhost'
 		local DB_NAME='wordpress_tests'
 		local DB_USER='root'
 		local DB_PASS=''
+	fi
+
+	if [[ '' == $DB_PASS ]]; then
+		DB_PASS="''"
 	fi
 
 	if [[ $1 ]]; then

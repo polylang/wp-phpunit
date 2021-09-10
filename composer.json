@@ -32,15 +32,11 @@
 		"lint": [
 			"@cs",
 			"@stan"
-		],
-		"install-tests": "bin/install-wp-suite.sh",
-		"install-tests-with-db": "bin/install-wp-suite.sh latest true"
+		]
 	},
 	"scripts-descriptions": {
 		"cs": "Runs PHPCS linter.",
 		"stan": "Runs PHPStan analysis.",
-		"lint": "Runs both PHPCS and PHPStan.",
-		"install-tests": "Installs the WordPress tests suite (without installing the database).",
-		"install-tests-with-db": "Installs the WordPress tests suite (with database creation)."
+		"lint": "Runs both PHPCS and PHPStan."
 	}
 }
