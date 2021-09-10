@@ -13,7 +13,7 @@
 		"brain/monkey": "^2.0",
 		"cheprasov/php-cli-args": "^3.0",
 		"php-stubs/woocommerce-stubs": "*",
-		"phpunit/phpunit": "^5.7",
+		"phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.5 || ^9.5",
 		"symfony/console": "^3.4 || ^4.4",
 		"wpsyntex/polylang-phpstan": "dev-master",
 		"wpsyntex/polylang-stubs": "dev-master"
