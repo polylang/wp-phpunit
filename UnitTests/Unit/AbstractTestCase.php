@@ -68,11 +68,11 @@ abstract class AbstractTestCase extends PHPUnitTestCase {
 				'_x'           => null,
 				'esc_attr_x'   => null,
 				'esc_html_x'   => null,
-				'_n'           => static function( $single, $plural, $number ) {
-					return 1 === $number ? $single: $plural;
+				'_n'           => static function ( $single, $plural, $number ) {
+					return 1 === $number ? $single : $plural;
 				},
-				'_nx'          => static function( $single, $plural, $number ) {
-					return 1 === $number ? $single: $plural;
+				'_nx'          => static function ( $single, $plural, $number ) {
+					return 1 === $number ? $single : $plural;
 				},
 				'esc_attr'     => null,
 				'esc_html'     => null,

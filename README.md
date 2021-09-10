@@ -114,19 +114,31 @@ require dirname( dirname( __DIR__ ) ) . '/vendor/wpsyntex/wp-phpunit/UnitTests/I
 bootstrapSuite(
     [
         'polylang-pro/polylang.php'                            => true,
-        'woocommerce/woocommerce.php'                          => 'withWoo',
+        'woocommerce/woocommerce.php'                          => [
+            'group' => 'withWoo',
+            'init'  => '\WP_Syntex\Polylang_Phpunit\Integration\WooCommerce\Bootstrap::initWoocommerce',
+        ],
+        'polylang-wc/polylang-wc.php'                          => [
+            'group' => 'withWoo',
+        ],
         dirname( dirname( __DIR__ ) ) . '/polylang-foobar.php' => true,
-    ],
-    dirname( __DIR__ ),
-    '5.6.0'
+    ], // A list of plugins to include and activate.
+    dirname( __DIR__ ), // Path to the directory containing all tests.
+    '5.6.0' // The PHP version required to run this test suite.
 );
 ```
 
-#### Extend the abstract class in your integration tests
+The previous code will:
 
-You can simply extend `WP_Syntex\Polylang_Phpunit\Integration\AbstractTestCase`.
+- Require `polylang.php` and `polylang-foobar.php`.
+- Require `woocommerce.php` and `polylang-wc.php` if `--group=withWoo` is used when invoking phpunit.
+- Call `\WP_Syntex\Polylang_Phpunit\Integration\WooCommerce\Bootstrap::initWoocommerce()` after `woocommerce.php` is required.
 
-If you need to list some plugins among the "active ones" (`get_option( 'active_plugins' )`) for your integration tests (this may be required for some plugins that test which plugins are active), you can create an abstract class like this one and extend it in your tests:
+#### Use the trait in your integration tests
+
+You can simply use the trait `WP_Syntex\Polylang_Phpunit\Integration\TestCaseTrait`.
+
+Hint: if you need to create your own methods `setUp()`, `wpSetUpBeforeClass`, etc, you can't simply call the ones from the trait with `parent::` like you would with parent/child classes. In this case you can do that:
 
 ```php
 <?php
@@ -139,12 +151,49 @@ If you need to list some plugins among the "active ones" (`get_option( 'active_p
 
 namespace WP_Syntex\Polylang_Foobar\Tests\Integration;
 
-use WP_Syntex\Polylang_Phpunit\Integration\AbstractTestCase as PllPhpunitTestCase;
+use WP_Syntex\Polylang_Phpunit\Integration\TestCaseTrait;
+use WP_UnitTest_Factory;
+use WP_UnitTestCase;
+
+abstract class AbstractTestCase extends WP_UnitTestCase {
+    use TestCaseTrait {
+        wpSetUpBeforeClass as private traitSetUpBeforeClass;
+        setUp as private traitSetUp;
+    }
+
+    public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+        self::traitSetUpBeforeClass( $factory );
+        // Do things.
+    }
+
+    public function setUp() {
+        $this->traitSetUp();
+        // Do more things.
+    }
+}
+```
+
+If you need to list some plugins among the "active ones" (`get_option( 'active_plugins' )`) for your integration tests (this may be required for some plugins that test which plugins are active), you can create a class like this one in your tests:
+
+```php
+<?php
+/**
+ * Test Case for all of the integration tests.
+ * php version 5.6
+ *
+ * @package WP_Syntex\Polylang_Foobar\Tests\Integration
+ */
+
+namespace WP_Syntex\Polylang_Foobar\Tests\Integration;
+
+use WP_Syntex\Polylang_Phpunit\Integration\TestCaseTrait;
+use WP_UnitTestCase;
 
 /**
  * Test Case for all of the integration tests.
  */
-abstract class AbstractTestCase extends PllPhpunitTestCase {
+abstract class AbstractTestCase extends WP_UnitTestCase {
+    use TestCaseTrait;
 
     /**
      * List of active plugins.
@@ -164,7 +213,7 @@ Some helpers are available in your tests, like toying with reflections or gettin
 
 #### Bootstrap for unit tests
 
-Example for your `bootstrap.php` file (unit tests):
+Example for your `bootstrap.php` file:
 
 ```php
 <?php
@@ -200,3 +249,35 @@ protected static $mockCommonWpFunctionsInSetUp = true;
 ```
 
 Like for integration tests, some helpers are available in your tests, from the `TestCaseTrait` trait.
+
+### PHPStan
+
+Since this project contains some PHPStan-related packages, you can use a few things directly:
+
+- `php-stubs/woocommerce-stubs`,
+- `wpsyntex/polylang-phpstan`,
+- `wpsyntex/polylang-stubs`.
+
+Example for your `phpstan.neon.dist` file:
+
+```neon
+includes:
+    - phar://phpstan.phar/conf/bleedingEdge.neon
+    - vendor/wpsyntex/polylang-phpstan/extension.neon
+parameters:
+    level: max
+    paths:
+        - %currentWorkingDirectory%/src
+        - %currentWorkingDirectory%/Tests
+        - %currentWorkingDirectory%/polylang-foobar.php
+    excludes_analyse:
+        - src/Dependencies/*
+    bootstrapFiles:
+        - vendor/wpsyntex/wp-phpunit/tmp/wordpress-tests-lib/includes/testcase.php
+        - vendor/wpsyntex/polylang-stubs/polylang-stubs.php
+    scanDirectories:
+        - vendor/wpsyntex/wp-phpunit/tmp/wordpress-tests-lib/includes
+        - vendor/wpsyntex/wp-phpunit/UnitTests
+    ignoreErrors:
+        - '#^Constant WPSYNTEX_PROJECT_PATH not found\.$#'
+```

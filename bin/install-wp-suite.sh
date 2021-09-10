@@ -3,7 +3,7 @@
 WORKING_DIR="$PWD"
 PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 INSTALL_DIR="$( cd "$(dirname "$PARENT_DIR")" ; pwd -P )/tmp"
-WP_CORE_DIR="$INSTALL_DIR/wordpress/"
+WP_CORE_DIR="$INSTALL_DIR/wordpress"
 WP_TESTS_DIR="$INSTALL_DIR/wordpress-tests-lib"
 
 # Colors used to print messages to stdout.
@@ -34,7 +34,7 @@ fi
 # $1 string The WordPress version to install. Default 'latest'.
 # $2 string Whether to install the database or not: 'true' or 'false'. Default 'false'.
 installWpSuite() {
-	rm -rf "$WP_CORE_DIR"
+	rm -rf "$WP_CORE_DIR/"
 	rm -rf "$WP_TESTS_DIR/"
 
 	local WP_VERSION='latest'
@@ -49,7 +49,7 @@ installWpSuite() {
 		local DB_HOST='localhost'
 		local DB_NAME='wordpress_tests'
 		local DB_USER='root'
-		local DB_PASS='root'
+		local DB_PASS=''
 	fi
 
 	if [[ $1 ]]; then
