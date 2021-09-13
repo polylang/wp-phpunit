@@ -52,10 +52,6 @@ installWpSuite() {
 		local DB_PASS=''
 	fi
 
-	if [[ '' == $DB_PASS ]]; then
-		DB_PASS="''"
-	fi
-
 	if [[ $1 ]]; then
 		WP_VERSION=$1
 	fi
@@ -71,7 +67,7 @@ installWpSuite() {
   - DB pass: ${INFO_C}${DB_PASS}${NO_C}
   - WP version: ${INFO_C}${WP_VERSION}${NO_C}
   - Skip DB creation: ${INFO_C}${SKIP_DB_CREATION}${NO_C}"
-	. "$PARENT_DIR/install-wp-tests.sh" $DB_NAME $DB_USER $DB_PASS $DB_HOST $WP_VERSION $SKIP_DB_CREATION
+	. "$PARENT_DIR/install-wp-tests.sh" "$DB_NAME" "$DB_USER" "$DB_PASS" "$DB_HOST" "$WP_VERSION" "$SKIP_DB_CREATION"
 }
 
 # Returns the value of the given config name.
