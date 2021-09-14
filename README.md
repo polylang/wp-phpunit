@@ -14,7 +14,7 @@ A code library for WP Syntex projects, containing:
 
 The test suite is installed in **this package**'s `tmp` folder.
 
-To tell the installation script how to connect to your database, you can create a `DB-CONFIG` file at the root of your project and formatted like follow (the file is not versioned with git of course).  
+To tell the installation script how to connect to your database, you can create a `DB-CONFIG` file at the root of your project and formatted like follow (the file is not versioned with git of course).
 Each line is optional, the default values are:
 
 ```txt
@@ -58,7 +58,7 @@ license {PLUGIN-SLUG}:{YOUR-LICENSE}
 site {PLUGIN-SLUG}:{YOUR-SITE}
 ```
 
-Depending on EDD config, the `site` line may not be required.  
+Depending on EDD config, the `site` line may not be required.
 Also, if your plugin from EDD doesn't require a license key, do the following:
 
 ```txt
@@ -249,35 +249,3 @@ protected static $mockCommonWpFunctionsInSetUp = true;
 ```
 
 Like for integration tests, some helpers are available in your tests, from the `TestCaseTrait` trait.
-
-### PHPStan
-
-Since this project contains some PHPStan-related packages, you can use a few things directly:
-
-- `php-stubs/woocommerce-stubs`,
-- `wpsyntex/polylang-phpstan`,
-- `wpsyntex/polylang-stubs`.
-
-Example for your `phpstan.neon.dist` file:
-
-```neon
-includes:
-    - phar://phpstan.phar/conf/bleedingEdge.neon
-    - vendor/wpsyntex/polylang-phpstan/extension.neon
-parameters:
-    level: max
-    paths:
-        - %currentWorkingDirectory%/src
-        - %currentWorkingDirectory%/Tests
-        - %currentWorkingDirectory%/polylang-foobar.php
-    excludes_analyse:
-        - src/Dependencies/*
-    bootstrapFiles:
-        - vendor/wpsyntex/wp-phpunit/tmp/wordpress-tests-lib/includes/testcase.php
-        - vendor/wpsyntex/polylang-stubs/polylang-stubs.php
-    scanDirectories:
-        - vendor/wpsyntex/wp-phpunit/tmp/wordpress-tests-lib/includes
-        - vendor/wpsyntex/wp-phpunit/UnitTests
-    ignoreErrors:
-        - '#^Constant WPSYNTEX_PROJECT_PATH not found\.$#'
-```
