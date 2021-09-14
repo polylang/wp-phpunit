@@ -14,7 +14,7 @@ A code library for WP Syntex projects, containing:
 
 The test suite is installed in **this package**'s `tmp` folder.
 
-To tell the installation script how to connect to your database, you can create a `DB-CONFIG` file at the root of your project and formatted like follow (the file is not versioned with git of course).
+To tell the installation script how to connect to your database, you can create a `DB-CONFIG` file at the root of your project and formatted like follow (the file is not versioned with git of course).  
 Each line is optional, the default values are:
 
 ```txt
