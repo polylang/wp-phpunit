@@ -13,7 +13,7 @@
 		"brain/monkey": "^2.0",
 		"cheprasov/php-cli-args": "^3.0",
 		"phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.5 || ^9.5",
-		"symfony/console": "^3.4 || ^4.4",
+		"symfony/console": "^3.4 || ^4.4"
 	},
 	"require-dev": {
 		"wpsyntex/polylang-phpstan": "dev-master",
