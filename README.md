@@ -249,35 +249,3 @@ protected static $mockCommonWpFunctionsInSetUp = true;
 ```
 
 Like for integration tests, some helpers are available in your tests, from the `TestCaseTrait` trait.
-
-### PHPStan
-
-Since this project contains some PHPStan-related packages, you can use a few things directly:
-
-- `php-stubs/woocommerce-stubs`,
-- `wpsyntex/polylang-phpstan`,
-- `wpsyntex/polylang-stubs`.
-
-Example for your `phpstan.neon.dist` file:
-
-```neon
-includes:
-    - phar://phpstan.phar/conf/bleedingEdge.neon
-    - vendor/wpsyntex/polylang-phpstan/extension.neon
-parameters:
-    level: max
-    paths:
-        - %currentWorkingDirectory%/src
-        - %currentWorkingDirectory%/Tests
-        - %currentWorkingDirectory%/polylang-foobar.php
-    excludes_analyse:
-        - src/Dependencies/*
-    bootstrapFiles:
-        - vendor/wpsyntex/wp-phpunit/tmp/wordpress-tests-lib/includes/testcase.php
-        - vendor/wpsyntex/polylang-stubs/polylang-stubs.php
-    scanDirectories:
-        - vendor/wpsyntex/wp-phpunit/tmp/wordpress-tests-lib/includes
-        - vendor/wpsyntex/wp-phpunit/UnitTests
-    ignoreErrors:
-        - '#^Constant WPSYNTEX_PROJECT_PATH not found\.$#'
-```
