@@ -23,7 +23,7 @@ trait TestCaseTrait {
 	 *
 	 * @var array<string|array<string>>
 	 */
-	protected $testDataReplacements = [
+	protected static $testDataReplacements = [
 		'tests'    => [ 'Integration', 'Unit' ],
 		'fixtures' => 'Fixtures',
 	];
@@ -49,18 +49,18 @@ trait TestCaseTrait {
 	/**
 	 * Returns the test data, if it exists, for this test class.
 	 *
-	 * @param  string $dir      Directory of the test class.
-	 * @param  string $filename Test data filename without the `.php` extension.
+	 * @param  string $dirPath  Directory of the test class.
+	 * @param  string $fileName Test data filename without the `.php` extension.
 	 * @return array<mixed>     Array of test data.
 	 */
-	protected function getTestData( $dir, $filename ) {
-		if ( empty( $dir ) || empty( $filename ) ) {
+	public static function getTestData( $dirPath, $fileName ) {
+		if ( empty( $dirPath ) || empty( $fileName ) ) {
 			return [];
 		}
 
-		$dir      = str_replace( $this->testDataReplacements['tests'], $this->testDataReplacements['fixtures'], $dir );
-		$dir      = rtrim( $dir, '\\/' );
-		$testdata = "$dir/{$filename}.php";
+		$dirPath  = str_replace( static::$testDataReplacements['tests'], static::$testDataReplacements['fixtures'], $dirPath );
+		$dirPath  = rtrim( $dirPath, '\\/' );
+		$testdata = "$dirPath/{$fileName}.php";
 
 		return is_readable( $testdata ) ? require $testdata : [];
 	}
@@ -71,7 +71,7 @@ trait TestCaseTrait {
 	 * @param  WP_Error|mixed $wpError A `WP_Error` object.
 	 * @return array<mixed>
 	 */
-	protected function getErrors( $wpError ) {
+	public static function getErrors( $wpError ) {
 		if ( ! $wpError instanceof WP_Error ) {
 			return [];
 		}
@@ -84,12 +84,12 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param string|object $class    Class name for a static property, or instance for an instance property.
-	 * @param string        $property Property name for which to gain access.
-	 * @return mixed                  The previous value of the property.
+	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param  string        $propertyName Property name for which to gain access.
+	 * @return mixed                       The previous value of the property.
 	 */
-	protected function resetPropertyValue( $class, $property ) {
-		return $this->setPropertyValue( $class, $property, null );
+	public static function resetPropertyValue( $objInstance, $propertyName ) {
+		return self::setPropertyValue( $objInstance, $propertyName, null );
 	}
 
 	/**
@@ -97,25 +97,25 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  string|object $class    Class name for a static property, or instance for an instance property.
-	 * @param  string        $property Property name for which to gain access.
-	 * @param  mixed         $value    The value to set to the property.
-	 * @return mixed                   The previous value of the property.
+	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param  string        $propertyName Property name for which to gain access.
+	 * @param  mixed         $value        The value to set to the property.
+	 * @return mixed                       The previous value of the property.
 	 */
-	protected function setPropertyValue( $class, $property, $value ) {
-		$ref = $this->getReflectiveProperty( $class, $property );
+	public static function setPropertyValue( $objInstance, $propertyName, $value ) {
+		$ref = self::getReflectiveProperty( $objInstance, $propertyName );
 
-		if ( is_object( $class ) ) {
-			$previous = $ref->getValue( $class );
+		if ( is_object( $objInstance ) ) {
+			$previousValue = $ref->getValue( $objInstance );
 			// Instance property.
-			$ref->setValue( $class, $value );
+			$ref->setValue( $objInstance, $value );
 		} else {
-			$previous = $ref->getValue();
+			$previousValue = $ref->getValue();
 			// Static property.
 			$ref->setValue( $value );
 		}
 
-		return $previous;
+		return $previousValue;
 	}
 
 	/**
@@ -123,41 +123,41 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  string|object $class    Class name for a static property, or instance for an instance property.
-	 * @param  string        $property Property name for which to gain access.
+	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param  string        $propertyName Property name for which to gain access.
 	 * @return mixed
 	 */
-	protected function getPropertyValue( $class, $property ) {
-		$ref = $this->getReflectiveProperty( $class, $property );
+	public static function getPropertyValue( $objInstance, $propertyName ) {
+		$ref = self::getReflectiveProperty( $objInstance, $propertyName );
 
-		if ( is_string( $class ) ) {
+		if ( is_string( $objInstance ) ) {
 			return $ref->getValue();
 		}
 
-		return $ref->getValue( $class );
+		return $ref->getValue( $objInstance );
 	}
 
 	/**
 	 * Invoke a private/protected method.
 	 *
-	 * @throws ReflectionException  Throws an exception upon failure.
+	 * @throws ReflectionException Throws an exception upon failure.
 	 *
-	 * @param  string|object $class  Class name for a static method, or instance for an instance method.
-	 * @param  string        $method Method name for which to gain access.
-	 * @param  array<mixed>  $args   List of args to pass to the method.
-	 * @return mixed                 The method result.
+	 * @param  object|string $objInstance Class name for a static method, or instance for an instance method.
+	 * @param  string        $methodName  Method name for which to gain access.
+	 * @param  array<mixed>  $args        List of args to pass to the method.
+	 * @return mixed                      The method result.
 	 */
-	protected function invokeMethod( $class, $method, $args = [] ) {
-		if ( is_string( $class ) ) {
-			$className = $class;
-			$class     = null;
+	public static function invokeMethod( $objInstance, $methodName, $args = [] ) {
+		if ( is_string( $objInstance ) ) {
+			$className   = $objInstance;
+			$objInstance = null;
 		} else {
-			$className = get_class( $class );
+			$className = get_class( $objInstance );
 		}
 
-		$method = $this->getReflectiveMethod( $className, $method );
+		$ref = self::getReflectiveMethod( $className, $methodName );
 
-		return $method->invokeArgs( $class, $args );
+		return $ref->invokeArgs( $objInstance, $args );
 	}
 
 	/**
@@ -165,15 +165,15 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if method does not exist.
 	 *
-	 * @param  string|object $class  Class name for a static method, or instance for an instance method.
-	 * @param  string        $method Method name for which to gain access.
+	 * @param  object|string $objInstance Class name for a static method, or instance for an instance method.
+	 * @param  string        $methodName  Method name for which to gain access.
 	 * @return ReflectionMethod
 	 */
-	protected function getReflectiveMethod( $class, $method ) {
-		$method = new ReflectionMethod( $class, $method );
-		$method->setAccessible( true );
+	public static function getReflectiveMethod( $objInstance, $methodName ) {
+		$ref = new ReflectionMethod( $objInstance, $methodName );
+		$ref->setAccessible( true );
 
-		return $method;
+		return $ref;
 	}
 
 	/**
@@ -181,15 +181,15 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  string|object $class    Class name for a static property, or instance for an instance property.
-	 * @param  string        $property Property name for which to gain access.
+	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param  string        $propertyName Property name for which to gain access.
 	 * @return ReflectionProperty
 	 */
-	protected function getReflectiveProperty( $class, $property ) {
-		$property = new ReflectionProperty( $class, $property );
-		$property->setAccessible( true );
+	public static function getReflectiveProperty( $objInstance, $propertyName ) {
+		$ref = new ReflectionProperty( $objInstance, $propertyName );
+		$ref->setAccessible( true );
 
-		return $property;
+		return $ref;
 	}
 
 	/**
@@ -197,17 +197,17 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  string|object $class    Class name for a static property, or instance for an instance property.
-	 * @param  string        $property Property name for which to gain access.
-	 * @param  mixed         $value    The value to set for the property.
+	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param  string        $propertyName Property name for which to gain access.
+	 * @param  mixed         $value        The value to set for the property.
 	 * @return ReflectionProperty
 	 */
-	protected function setReflectiveProperty( $class, $property, $value ) {
-		$ref = $this->getReflectiveProperty( $class, $property );
+	public static function setReflectiveProperty( $objInstance, $propertyName, $value ) {
+		$ref = self::getReflectiveProperty( $objInstance, $propertyName );
 
-		if ( is_object( $class ) ) {
+		if ( is_object( $objInstance ) ) {
 			// Instance property.
-			$ref->setValue( $class, $value );
+			$ref->setValue( $objInstance, $value );
 		} else {
 			// Static property.
 			$ref->setValue( $value );
