@@ -21,7 +21,7 @@ Each line is optional, the default values are:
 db_host: localhost
 db_name: wordpress_tests
 db_user: root
-db_pass: root
+db_pass: '' (an empty string)
 ```
 
 ### Install the dependencies
@@ -45,7 +45,7 @@ downloadPolylangPro
 downloadPolylangForWoocommerce
 
 # Install WooCommerce.
-downloadPluginFromRepository woocommerce
+downloadWoocommerce
 
 # Install TwentyFourteen.
 downloadThemeFromRepository twentyfourteen
@@ -87,6 +87,16 @@ Then you can create composer scripts like these ones for example:
         "build-update": "vendor/wpsyntex/wp-phpunit/bin/build.sh -- -u",
         "dist": "vendor/wpsyntex/wp-phpunit/bin/distribute.sh -- polylang-foobar"
     },
+    "scripts-descriptions": {
+        "install-suite": "Installs the WordPress tests suite (without installing the database).",
+        "install-suite-with-db": "Installs the WordPress tests suite (with database creation).",
+        "install-plugins": "Installs dependencies needed for integration tests.",
+        "install-tests": "Installs both the WordPress tests suite (without installing the database) and the dependencies needed for integration tests.",
+        "install-tests-with-db": "Installs both the WordPress tests suite (with database creation) and the dependencies needed for integration tests, without creating the database.",
+        "build": "Builds the project.",
+        "build-update": "Builds the project (runs `composer update` instead of `composer install`).",
+        "dist": "Make the zip file to distibute the project release."
+    }
 }
 ```
 
@@ -112,33 +122,35 @@ use function WP_Syntex\Polylang_Phpunit\Integration\bootstrapSuite;
 require dirname( dirname( __DIR__ ) ) . '/vendor/wpsyntex/wp-phpunit/UnitTests/Integration/bootstrap.php';
 
 bootstrapSuite(
-    [
-        'polylang-pro/polylang.php'                            => true,
-        'woocommerce/woocommerce.php'                          => [
-            'group' => 'withWoo',
-            'init'  => '\WP_Syntex\Polylang_Phpunit\Integration\WooCommerce\Bootstrap::initWoocommerce',
-        ],
-        'polylang-wc/polylang-wc.php'                          => [
-            'group' => 'withWoo',
-        ],
-        dirname( dirname( __DIR__ ) ) . '/polylang-foobar.php' => true,
-    ], // A list of plugins to include and activate.
     dirname( __DIR__ ), // Path to the directory containing all tests.
-    '5.6.0' // The PHP version required to run this test suite.
+    '5.6.0', // The PHP version required to run this test suite.
+    [
+        'plugins' => [
+            'polylang-pro/polylang.php'                            => true,
+            'woocommerce/woocommerce.php'                          => [
+                'group' => 'WithWoo',
+                'init'  => '\WP_Syntex\Polylang_Phpunit\Integration\WooCommerce\Bootstrap::initWoocommerce',
+            ],
+            'polylang-wc/polylang-wc.php'                          => [
+                'group' => 'WithWoo',
+            ],
+            dirname( dirname( __DIR__ ) ) . '/polylang-foobar.php' => true,
+        ], // A list of plugins to include and activate.
+    ]
 );
 ```
 
 The previous code will:
 
 - Require `polylang.php` and `polylang-foobar.php`.
-- Require `woocommerce.php` and `polylang-wc.php` if `--group=withWoo` is used when invoking phpunit.
+- Require `woocommerce.php` and `polylang-wc.php` if `--group=WithWoo` is used when invoking phpunit.
 - Call `\WP_Syntex\Polylang_Phpunit\Integration\WooCommerce\Bootstrap::initWoocommerce()` after `woocommerce.php` is required.
 
 #### Use the trait in your integration tests
 
-You can simply use the trait `WP_Syntex\Polylang_Phpunit\Integration\TestCaseTrait`.
+You can use the trait `WP_Syntex\Polylang_Phpunit\Integration\TestCaseTrait` in your integration tests.
 
-Hint: if you need to create your own methods `setUp()`, `wpSetUpBeforeClass`, etc, you can't simply call the ones from the trait with `parent::` like you would with parent/child classes. In this case you can do that:
+Hint: if you need to create your own methods `set_up()`, `set_up_before_class`, etc, you can't simply call the ones from the trait with `parent::` like you would with parent/child classes. In this case you can do that:
 
 ```php
 <?php
@@ -152,21 +164,20 @@ Hint: if you need to create your own methods `setUp()`, `wpSetUpBeforeClass`, et
 namespace WP_Syntex\Polylang_Foobar\Tests\Integration;
 
 use WP_Syntex\Polylang_Phpunit\Integration\TestCaseTrait;
-use WP_UnitTest_Factory;
 use WP_UnitTestCase;
 
 abstract class AbstractTestCase extends WP_UnitTestCase {
     use TestCaseTrait {
-        wpSetUpBeforeClass as private traitSetUpBeforeClass;
-        setUp as private traitSetUp;
+        set_up_before_class as private traitSetUpBeforeClass;
+        set_up as private traitSetUp;
     }
 
-    public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
-        self::traitSetUpBeforeClass( $factory );
+    public static function set_up_before_class() {
+        self::traitSetUpBeforeClass();
         // Do things.
     }
 
-    public function setUp() {
+    public function set_up() {
         $this->traitSetUp();
         // Do more things.
     }
@@ -226,26 +237,51 @@ Example for your `bootstrap.php` file:
 
 namespace WP_Syntex\Polylang_Foobar\Tests\Unit;
 
-use WP_Syntex\Polylang_Phpunit\Bootstrap;
+use function WP_Syntex\Polylang_Phpunit\Unit\bootstrapSuite;
 
-( new Bootstrap( 'Unit', dirname( __DIR__ ), '5.6.0' ) )->initTestSuite();
+require dirname( dirname( __DIR__ ) ) . '/vendor/wpsyntex/wp-phpunit/UnitTests/Unit/bootstrap.php';
+
+bootstrapSuite( dirname( __DIR__ ), '5.6.0' );
 ```
 
 #### Extend the abstract class in your unit tests
 
-You can simply extend `WP_Syntex\Polylang_Phpunit\Unit\AbstractTestCase`.
+You can extend `WP_Syntex\Polylang_Phpunit\Unit\AbstractTestCase` in your unit tests.
 
-[Brain\Monkey](https://brain-wp.github.io/BrainMonkey/) is available in your unit tests.
+[Brain\Monkey](https://brain-wp.github.io/BrainMonkey/) is available in your unit tests, since it is included in [Yoast\WPTestUtils](https://github.com/Yoast/wp-test-utils).
 
-In your tests you can mock WordPress' most common functions by setting a custom property:
+In your tests you can mock [WordPress' most common functions](https://github.com/Yoast/wp-test-utils/blob/develop/src/BrainMonkey/TestCase.php) by setting two custom properties. And like for integration tests, some helpers are available in your tests, from the `TestCaseTrait` trait.
 
 ```php
+<?php
 /**
- * Mock the common WP Functions in the setUp().
+ * Tests for `WP_Syntex\Polylang_Foobar\barbaz()`.
+ * php version 5.6
  *
- * @var bool
+ * @package WP_Syntex\Polylang_Foobar\Tests\Unit
  */
-protected static $mockCommonWpFunctionsInSetUp = true;
-```
 
-Like for integration tests, some helpers are available in your tests, from the `TestCaseTrait` trait.
+namespace WP_Syntex\Polylang_Foobar\Tests\Unit;
+
+use WP_Syntex\Polylang_Phpunit\Unit\AbstractTestCase;
+
+/**
+ * Tests for `WP_Syntex\Polylang_Foobar\barbaz()`.
+ */
+class Barbaz extends AbstractTestCase {$$
+
+    /**
+     * Stubs the WP native translation functions in the set_up().
+     *
+     * @var bool
+     */
+    protected static $stubTranslationFunctions = true;
+
+    /**
+     * Stubs the WP native escaping functions in the set_up().
+     *
+     * @var bool
+     */
+    protected static $stubEscapeFunctions = true;
+}
+```
