@@ -10,16 +10,16 @@
 	},
 	"require": {
 		"php": ">=5.6",
-		"brain/monkey": "^2.0",
 		"cheprasov/php-cli-args": "^3.0",
-		"phpunit/phpunit": "^5.7 || ^6.5 || ^7.5 || ^8.5 || ^9.5",
-		"symfony/console": "^3.4 || ^4.4"
+		"phpunit/phpunit": "^5.7.21 || ^6.5 || ^7.5",
+		"symfony/console": "^3.4 || ^4.4",
+		"yoast/wp-test-utils": "^1.0.0"
 	},
 	"require-dev": {
+		"php-stubs/woocommerce-stubs": "*",
 		"wpsyntex/polylang-phpstan": "dev-master",
 		"wpsyntex/polylang-stubs": "dev-master",
-		"php-stubs/woocommerce-stubs": "*",
-		"wpsyntex/polylang-cs": "dev-main"
+		"wpsyntex/polylang-cs": "dev-new-allow-tests-setup-methods"
 	},
 	"autoload": {
 		"psr-4": {
@@ -28,15 +28,19 @@
 	},
 	"scripts": {
 		"cs": "vendor/bin/phpcs",
-		"stan": "vendor/bin/phpstan analyze --memory-limit=400M",
+		"stan": "vendor/bin/phpstan analyze --memory-limit=1G",
 		"lint": [
 			"@cs",
 			"@stan"
-		]
+		],
+		"install-suite": "bin/install-wp-suite.sh",
+		"install-suite-with-db": "bin/install-wp-suite.sh latest true"
 	},
 	"scripts-descriptions": {
 		"cs": "Runs PHPCS linter.",
 		"stan": "Runs PHPStan analysis.",
-		"lint": "Runs both PHPCS and PHPStan."
+		"lint": "Runs both PHPCS and PHPStan.",
+		"install-suite": "Installs the WordPress tests suite (without installing the database).",
+		"install-suite-with-db": "Installs the WordPress tests suite (with database creation)."
 	}
 }
