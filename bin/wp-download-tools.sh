@@ -222,6 +222,39 @@ downloadPolylangPro() {
 	cd "$WORKING_DIR"
 }
 
+# Downloads WooCommerce.
+# Writes to stdout whether the plugin has been installed or not.
+#
+# Globals: WC_VERSION, WORKING_DIR, WP_PLUGINS_DIR
+downloadWoocommerce() {
+	local PLUGIN_DIR="woocommerce"
+	local PLUGIN_FILE="$PLUGIN_DIR/woocommerce.php"
+
+	if [[ -f "$WP_PLUGINS_DIR/$PLUGIN_FILE" ]]; then
+		# The plugin exists.
+		messageAlreadyInstalled "$PLUGIN_DIR"
+		return
+	fi
+
+	git clone https://github.com/woocommerce/woocommerce.git "$WP_PLUGINS_DIR/$PLUGIN_DIR"
+	cd "$WP_PLUGINS_DIR/$PLUGIN_DIR"
+
+	if [[ $WC_VERSION == 'dev' ]]; then
+		git checkout trunk
+	else
+		git checkout $WC_VERSION
+	fi
+
+	composer install --no-dev
+
+	if [[ ! $WC_VERSION ]]; then
+		WC_VERSION=$(getVersionFromPluginFile $PLUGIN_FILE)
+	fi
+
+	messageSuccessfullyInstalled "$PLUGIN_DIR $WC_VERSION"
+	cd "$WORKING_DIR"
+}
+
 # Downloads Gutenberg.
 # Writes to stdout whether the plugin has been installed or not.
 #
