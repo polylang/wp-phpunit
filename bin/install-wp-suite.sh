@@ -27,7 +27,7 @@ fi
 # db_host: localhost
 # db_name: wordpress_tests
 # db_user: root
-# db_pass: root
+# db_pass: '' (an empty string)
 #
 # Globals: PARENT_DIR, WP_CORE_DIR, $WP_TESTS_DIR
 #
