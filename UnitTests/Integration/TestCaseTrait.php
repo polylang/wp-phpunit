@@ -14,7 +14,6 @@ use PLL_Admin_Default_Term;
 use PLL_Admin_Model;
 use PLL_Install;
 use WP_Syntex\Polylang_Phpunit\TestCaseTrait as GlobalTestCaseTrait;
-use WP_UnitTest_Factory;
 use WP_UnitTestCase;
 
 /**
@@ -33,10 +32,9 @@ trait TestCaseTrait {
 	/**
 	 * Initialization before all tests run.
 	 *
-	 * @param  WP_UnitTest_Factory $factory WP_UnitTest_Factory object.
 	 * @return void
 	 */
-	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+	public static function set_up_before_class() {
 		$options = PLL_Install::get_default_options();
 
 		$options['hide_default']  = 0; // Force option to pre 2.1.5 value otherwise phpunit tests break on Travis.
@@ -50,7 +48,7 @@ trait TestCaseTrait {
 	 *
 	 * @return void
 	 */
-	public static function wpTearDownAfterClass() {
+	public static function tear_down_after_class() {
 		self::deleteAllLanguages();
 	}
 
@@ -59,8 +57,8 @@ trait TestCaseTrait {
 	 *
 	 * @return void
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		/**
 		 * `$this->activePlugins` must be an array of paths to plugin files, relative to the plugins directory.
@@ -77,8 +75,8 @@ trait TestCaseTrait {
 	 *
 	 * @return void
 	 */
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		if ( ! empty( $this->activePlugins ) ) {
 			remove_filter( 'pre_option_active_plugins', [ $this, 'filterActivePlugins' ] );

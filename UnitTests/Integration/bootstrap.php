@@ -9,28 +9,37 @@
 namespace WP_Syntex\Polylang_Phpunit\Integration;
 
 use WP_Syntex\Polylang_Phpunit\Bootstrap;
-use WP_Syntex\Polylang_Phpunit\Integration\WooCommerce\Bootstrap as WooBootstrap;
 
 /**
  * Bootstraps the integration testing environment with WordPress, PLL AI, and other dependencies.
  *
- * @param  array<bool|array<string|callable>> $plugins    {
- *     A list of plugins to include and activate.
- *     Array keys are paths to the plugin's main file. The paths can be absolute, or relative to the plugins directory.
+ * @param  string       $testsDir   Path to the directory containing all tests.
+ * @param  string       $phpVersion The PHP version required to run this test suite.
+ * @param  array<mixed> $args       {
+ *     Additional optional arguments.
  *
- *     @type bool|array<string|callable> Values tell if the plugin must be included or not and can be:
- *       - bool: whether to include and activate the plugin or not.
- *       - array: {
- *             @type string   $group A group or a list of groups, separated by commas. The plugin will be included and
- *                                   activated only if the tests run at least one of these groups. Optional.
- *             @type callable $init  A callback to executed after all plugins are included. Optional.
- *         }
+ *     @type array<bool|array<string|callable>> $plugins {
+ *         A list of plugins to include and activate.
+ *         Array keys are paths to the plugin's main file. The paths can be absolute, or relative to the plugins directory.
+ *
+ *         @type bool|array<string|callable> Values tell if the plugin must be included or not and can be:
+ *           - bool: whether to include and activate the plugin or not.
+ *           - array: {
+ *                 @type string   $group A group or a list of groups, separated by commas. The plugin will be included and
+ *                                       activated only if the tests run at least one of these groups. Optional.
+ *                 @type callable $init  A callback to executed after all plugins are included. Optional.
+ *             }
+ *     }
  * }
- * @param  string                             $testsDir   Path to the directory containing all tests.
- * @param  string                             $phpVersion The PHP version required to run this test suite.
  * @return void
  */
-function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
+function bootstrapSuite( $testsDir, $phpVersion, $args = [] ) {
+	$args      = array_merge(
+		[
+			'plugins' => [],
+		],
+		$args
+	);
 	$bootstrap = new Bootstrap( 'Integration', $testsDir, $phpVersion );
 
 	$bootstrap->initTestSuite();
@@ -40,7 +49,7 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 	$allPlugins   = []; // Plugins that will be loaded. Format: {pluginPath} => {initCallback} (empty string if no callback is needed).
 	$groups       = []; // Cache saying if groups are requested (with `--group=foo`). Format: {groupName} => {isRequested}.
 
-	foreach ( $plugins as $path => $args ) {
+	foreach ( $args['plugins'] as $path => $pluginArgs ) {
 		if ( ! pathIsAbsolute( $path ) ) {
 			// Make path absolute.
 			$path = $wpPluginsDir . $path;
@@ -50,9 +59,9 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 			trigger_error( 'One or several dependencies are not installed. Please run `composer install-plugins`.', E_USER_ERROR );
 		}
 
-		if ( is_bool( $args ) ) {
+		if ( is_bool( $pluginArgs ) ) {
 			// No groups, no callbacks.
-			if ( $args ) {
+			if ( $pluginArgs ) {
 				// Load this file.
 				$allPlugins[ $path ] = '';
 			}
@@ -60,36 +69,36 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 			continue;
 		}
 
-		if ( ! is_array( $args ) ) {
+		if ( ! is_array( $pluginArgs ) ) {
 			// Only bool, array are allowed.
 			continue;
 		}
 
-		if ( empty( $args['init'] ) || ! is_callable( $args['init'] ) ) {
+		if ( empty( $pluginArgs['init'] ) || ! is_callable( $pluginArgs['init'] ) ) {
 			// Make sure the `init` key is set and has a valid value.
-			$args['init'] = '';
+			$pluginArgs['init'] = '';
 		}
 
-		if ( isset( $args['group'] ) ) {
+		if ( isset( $pluginArgs['group'] ) ) {
 			// The value of the `group` key must be an array of groups.
-			if ( is_string( $args['group'] ) ) {
-				$args['group'] = explode( ',', $args['group'] );
+			if ( is_string( $pluginArgs['group'] ) ) {
+				$pluginArgs['group'] = explode( ',', $pluginArgs['group'] );
 			}
 
-			if ( is_array( $args['group'] ) ) {
-				$args['group'] = array_filter( array_map( 'trim', $args['group'] ) );
+			if ( is_array( $pluginArgs['group'] ) ) {
+				$pluginArgs['group'] = array_filter( array_map( 'trim', $pluginArgs['group'] ) );
 			} else {
-				$args['group'] = [];
+				$pluginArgs['group'] = [];
 			}
 		}
 
-		if ( empty( $args['group'] ) ) {
+		if ( empty( $pluginArgs['group'] ) ) {
 			// No groups required, load this file.
-			$allPlugins[ $path ] = $args['init'];
+			$allPlugins[ $path ] = $pluginArgs['init'];
 			continue;
 		}
 
-		foreach ( $args['group'] as $group ) { // @phpstan-ignore-line
+		foreach ( $pluginArgs['group'] as $group ) {
 			if ( ! isset( $groups[ $group ] ) ) {
 				// Put in cache.
 				$groups[ $group ] = $bootstrap->isGroup( $group );
@@ -97,7 +106,7 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 
 			if ( $groups[ $group ] ) {
 				// This group has been requested, load this file.
-				$allPlugins[ $path ] = $args['init'];
+				$allPlugins[ $path ] = $pluginArgs['init'];
 				break;
 			}
 		}
@@ -123,7 +132,7 @@ function bootstrapSuite( $plugins, $testsDir, $phpVersion ) {
 			// Init callbacks.
 			foreach ( $allPlugins as $initCallback ) {
 				if ( ! empty( $initCallback ) ) {
-					call_user_func( $initCallback, $wpPluginsDir, $wpThemesDir ); // @phpstan-ignore-line
+					call_user_func( $initCallback, $wpPluginsDir, $wpThemesDir );
 				}
 			}
 		}
