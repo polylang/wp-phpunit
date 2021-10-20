@@ -19,7 +19,7 @@
 		"php-stubs/woocommerce-stubs": "*",
 		"wpsyntex/polylang-phpstan": "dev-master",
 		"wpsyntex/polylang-stubs": "dev-master",
-		"wpsyntex/polylang-cs": "dev-new-allow-tests-setup-methods"
+		"wpsyntex/polylang-cs": "dev-main"
 	},
 	"autoload": {
 		"psr-4": {

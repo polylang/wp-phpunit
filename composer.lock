@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ddea47f2cdc32e10373d298182f1628d",
+    "content-hash": "a1c2ee55692fb38e608f198b2b757ea6",
     "packages": [
         {
             "name": "antecedent/patchwork",
@@ -586,12 +586,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "0005eb9eaecc2a3a00b8ee34c06643a316ebb228"
+                "reference": "622548b623e81ca6d78b721c5e029f4ce664f170"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/0005eb9eaecc2a3a00b8ee34c06643a316ebb228",
-                "reference": "0005eb9eaecc2a3a00b8ee34c06643a316ebb228",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/622548b623e81ca6d78b721c5e029f4ce664f170",
+                "reference": "622548b623e81ca6d78b721c5e029f4ce664f170",
                 "shasum": ""
             },
             "require": {
@@ -634,9 +634,9 @@
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
             "support": {
                 "issues": "https://github.com/phpDocumentor/ReflectionDocBlock/issues",
-                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/master"
+                "source": "https://github.com/phpDocumentor/ReflectionDocBlock/tree/5.3.0"
             },
-            "time": "2021-10-05T20:58:53+00:00"
+            "time": "2021-10-19T17:43:47+00:00"
         },
         {
             "name": "phpdocumentor/type-resolver",
@@ -3882,16 +3882,16 @@
         },
         {
             "name": "wpsyntex/polylang-cs",
-            "version": "dev-new-allow-tests-setup-methods",
+            "version": "dev-main",
             "source": {
                 "type": "git",
                 "url": "https://github.com/polylang/polylang-cs.git",
-                "reference": "09eb10926042d09145edc3c4cafeb59d56daf8bc"
+                "reference": "54418edfd9eb43a2f2fe398481f0bf26a4d76ef7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/polylang/polylang-cs/zipball/09eb10926042d09145edc3c4cafeb59d56daf8bc",
-                "reference": "09eb10926042d09145edc3c4cafeb59d56daf8bc",
+                "url": "https://api.github.com/repos/polylang/polylang-cs/zipball/54418edfd9eb43a2f2fe398481f0bf26a4d76ef7",
+                "reference": "54418edfd9eb43a2f2fe398481f0bf26a4d76ef7",
                 "shasum": ""
             },
             "require": {
@@ -3904,6 +3904,7 @@
                 "suin/phpcs-psr4-sniff": "^3.0",
                 "wp-coding-standards/wpcs": "^2.3"
             },
+            "default-branch": true,
             "type": "phpcodesniffer-standard",
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -3913,9 +3914,9 @@
             "homepage": "https://github.com/polylang/polylang-cs",
             "support": {
                 "issues": "https://github.com/polylang/polylang-cs/issues",
-                "source": "https://github.com/polylang/polylang-cs/tree/new-allow-tests-setup-methods"
+                "source": "https://github.com/polylang/polylang-cs/tree/main"
             },
-            "time": "2021-10-19T11:35:09+00:00"
+            "time": "2021-10-20T13:00:05+00:00"
         },
         {
             "name": "wpsyntex/polylang-phpstan",
