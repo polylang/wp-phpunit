@@ -150,7 +150,7 @@ The previous code will:
 
 You can use the trait `WP_Syntex\Polylang_Phpunit\Integration\TestCaseTrait` in your integration tests.
 
-Hint: if you need to create your own methods `set_up()`, `set_up_before_class`, etc, you can't simply call the ones from the trait with `parent::` like you would with parent/child classes. In this case you can do that:
+Hint: if you need to create your own methods `set_up()`, `wpSetUpBeforeClass`, etc, you can't simply call the ones from the trait with `parent::` like you would with parent/child classes. In this case you can do that:
 
 ```php
 <?php
@@ -164,16 +164,17 @@ Hint: if you need to create your own methods `set_up()`, `set_up_before_class`, 
 namespace WP_Syntex\Polylang_Foobar\Tests\Integration;
 
 use WP_Syntex\Polylang_Phpunit\Integration\TestCaseTrait;
+use WP_UnitTest_Factory;
 use WP_UnitTestCase;
 
 abstract class AbstractTestCase extends WP_UnitTestCase {
     use TestCaseTrait {
-        set_up_before_class as private traitSetUpBeforeClass;
+        wpSetUpBeforeClass as private traitWpSetUpBeforeClass;
         set_up as private traitSetUp;
     }
 
-    public static function set_up_before_class() {
-        self::traitSetUpBeforeClass();
+    public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+        self::traitWpSetUpBeforeClass( $factory );
         // Do things.
     }
 

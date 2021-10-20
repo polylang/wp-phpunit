@@ -14,6 +14,7 @@ use PLL_Admin_Default_Term;
 use PLL_Admin_Model;
 use PLL_Install;
 use WP_Syntex\Polylang_Phpunit\TestCaseTrait as GlobalTestCaseTrait;
+use WP_UnitTest_Factory;
 use WP_UnitTestCase;
 
 /**
@@ -32,9 +33,10 @@ trait TestCaseTrait {
 	/**
 	 * Initialization before all tests run.
 	 *
+	 * @param  WP_UnitTest_Factory $factory WP_UnitTest_Factory object.
 	 * @return void
 	 */
-	public static function set_up_before_class() {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		$options = PLL_Install::get_default_options();
 
 		$options['hide_default']  = 0; // Force option to pre 2.1.5 value otherwise phpunit tests break on Travis.
