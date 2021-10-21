@@ -227,30 +227,38 @@ downloadPolylangPro() {
 #
 # Globals: WC_VERSION, WORKING_DIR, WP_PLUGINS_DIR
 downloadWoocommerce() {
-	local PLUGIN_DIR_NAME="woocommerce"
-
-	if [[ ${WC_VERSION:0:1} == "4" || ${WC_VERSION:0:1} == "5" ]]; then
-		# Backward compatibility with WC < 6.0.
-		local PLUGIN_DIR="$PLUGIN_DIR_NAME"
-	else
-		local PLUGIN_DIR="$PLUGIN_DIR_NAME/plugins/$PLUGIN_DIR_NAME"
-	fi
-
+	local PLUGIN_DIR="woocommerce"
 	local PLUGIN_FILE="$PLUGIN_DIR/woocommerce.php"
 
 	if [[ -f "$WP_PLUGINS_DIR/$PLUGIN_FILE" ]]; then
 		# The plugin exists.
-		messageAlreadyInstalled "$PLUGIN_DIR_NAME"
+		messageAlreadyInstalled "$PLUGIN_DIR"
 		return
 	fi
 
-	git clone https://github.com/woocommerce/woocommerce.git "$WP_PLUGINS_DIR/$PLUGIN_DIR_NAME"
-	cd "$WP_PLUGINS_DIR/$PLUGIN_DIR"
+	if [[ ${WC_VERSION:0:1} == "4" || ${WC_VERSION:0:1} == "5" ]]; then
+		# Backward compatibility with WC < 6.0.
+		local MOVE=0
+		local TARGET_DIR="$PLUGIN_DIR"
+	else
+		#local PLUGIN_DIR="$PLUGIN_DIR/plugins/$PLUGIN_DIR"
+		local MOVE=1
+		local TARGET_DIR="wootmp"
+	fi
+
+	git clone https://github.com/woocommerce/woocommerce.git "$WP_PLUGINS_DIR/$TARGET_DIR"
+	cd "$WP_PLUGINS_DIR/$TARGET_DIR"
 
 	if [[ $WC_VERSION == 'dev' ]]; then
 		git checkout trunk
 	else
 		git checkout $WC_VERSION
+	fi
+
+	if [[ $MOVE ]]; then
+		mv "$WP_PLUGINS_DIR/$TARGET_DIR/plugins/$PLUGIN_DIR" "$WP_PLUGINS_DIR"
+		rm -rf "$WP_PLUGINS_DIR/$TARGET_DIR"
+		cd "$WP_PLUGINS_DIR/$PLUGIN_DIR"
 	fi
 
 	composer install --no-dev
@@ -259,7 +267,7 @@ downloadWoocommerce() {
 		WC_VERSION=$(getVersionFromPluginFile "$PLUGIN_FILE")
 	fi
 
-	messageSuccessfullyInstalled "$PLUGIN_DIR_NAME $WC_VERSION"
+	messageSuccessfullyInstalled "$PLUGIN_DIR $WC_VERSION"
 	cd "$WORKING_DIR"
 }
 
