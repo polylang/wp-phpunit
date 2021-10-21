@@ -36,7 +36,7 @@ trait TestCaseTrait {
 	 * @param  WP_UnitTest_Factory $factory WP_UnitTest_Factory object.
 	 * @return void
 	 */
-	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
+	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		$options = PLL_Install::get_default_options();
 
 		$options['hide_default']  = 0; // Force option to pre 2.1.5 value otherwise phpunit tests break on Travis.

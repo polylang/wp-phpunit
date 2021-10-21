@@ -66,7 +66,34 @@ trait TestCaseTrait {
 	}
 
 	/**
-	 * Get the errors from a `WP_Error` object.
+	 * Prepares data for log.
+	 *
+	 * @param  mixed $data Data to log.
+	 * @return string
+	 */
+	public static function varExport( $data ) {
+		if ( null === $data ) {
+			return 'null';
+		}
+
+		if ( is_bool( $data ) ) {
+			return $data ? 'true' : 'false';
+		}
+
+		if ( is_int( $data ) || is_float( $data ) ) {
+			return "$data";
+		}
+
+		$data = is_string( $data ) ? $data : (string) var_export( $data, true ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_var_export
+		$data = (string) preg_replace( '@=>\s+([^\s])@', '=> $1', $data );
+		$data = (string) preg_replace( '/array\s*\(/', 'array(', $data );
+		$data = (string) preg_replace( '/array\(\s+\)/', 'array()', $data );
+
+		return trim( $data );
+	}
+
+	/**
+	 * Returns the errors from a `WP_Error` object.
 	 *
 	 * @param  WP_Error|mixed $wpError A `WP_Error` object.
 	 * @return array<mixed>
@@ -80,7 +107,7 @@ trait TestCaseTrait {
 	}
 
 	/**
-	 * Reset the value of a private/protected property to null.
+	 * Resets the value of a private/protected property to null.
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
@@ -93,7 +120,7 @@ trait TestCaseTrait {
 	}
 
 	/**
-	 * Set the value of a private/protected property.
+	 * Sets the value of a private/protected property.
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
@@ -119,7 +146,7 @@ trait TestCaseTrait {
 	}
 
 	/**
-	 * Get the value of a private/protected property.
+	 * Returns the value of a private/protected property.
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
@@ -138,7 +165,7 @@ trait TestCaseTrait {
 	}
 
 	/**
-	 * Invoke a private/protected method.
+	 * Invokes a private/protected method.
 	 *
 	 * @throws ReflectionException Throws an exception upon failure.
 	 *
@@ -161,7 +188,7 @@ trait TestCaseTrait {
 	}
 
 	/**
-	 * Get reflective access to a private/protected method.
+	 * Gives reflective access to a private/protected method.
 	 *
 	 * @throws ReflectionException Throws an exception if method does not exist.
 	 *
@@ -177,7 +204,7 @@ trait TestCaseTrait {
 	}
 
 	/**
-	 * Get reflective access to a private/protected property.
+	 * Gives reflective access to a private/protected property.
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
@@ -193,7 +220,7 @@ trait TestCaseTrait {
 	}
 
 	/**
-	 * Set the value of a private/protected property.
+	 * Sets the value of a private/protected property.
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
