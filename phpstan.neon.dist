@@ -6,7 +6,6 @@ parameters:
 	paths:
 		- %currentWorkingDirectory%/UnitTests
 	bootstrapFiles:
-		- tmp/wordpress-tests-lib/includes/testcase.php
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-packages-stubs.php
 	scanDirectories:
