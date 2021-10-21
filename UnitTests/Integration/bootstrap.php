@@ -1,6 +1,6 @@
 <?php
 /**
- * Bootstraps the PLL AI integration tests
+ * Bootstraps the integration tests
  * php version 5.6
  *
  * @package WP_Syntex\Polylang_Phpunit\Integration
@@ -11,7 +11,7 @@ namespace WP_Syntex\Polylang_Phpunit\Integration;
 use WP_Syntex\Polylang_Phpunit\Bootstrap;
 
 /**
- * Bootstraps the integration testing environment with WordPress, PLL AI, and other dependencies.
+ * Bootstraps the integration testing environment with WordPress, plugins, and other dependencies.
  *
  * @param  string       $testsDir   Path to the directory containing all tests.
  * @param  string       $phpVersion The PHP version required to run this test suite.

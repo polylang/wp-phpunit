@@ -1,6 +1,6 @@
 <?php
 /**
- * Bootstraps the PLL AI unit tests
+ * Bootstraps the unit tests
  * php version 5.6
  *
  * @package WP_Syntex\Polylang_Phpunit\Integration
