@@ -50,7 +50,7 @@ trait TestCaseTrait {
 	 *
 	 * @return void
 	 */
-	public static function tear_down_after_class() {
+	public static function wpTearDownAfterClass() {
 		self::deleteAllLanguages();
 	}
 
