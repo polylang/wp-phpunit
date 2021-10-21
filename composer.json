@@ -11,7 +11,6 @@
 	"require": {
 		"php": ">=5.6",
 		"cheprasov/php-cli-args": "^3.0",
-		"phpunit/phpunit": "^5.7.21 || ^6.5 || ^7.5",
 		"symfony/console": "^3.4 || ^4.4",
 		"yoast/wp-test-utils": "^1.0.0"
 	},
