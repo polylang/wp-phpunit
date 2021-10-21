@@ -227,16 +227,24 @@ downloadPolylangPro() {
 #
 # Globals: WC_VERSION, WORKING_DIR, WP_PLUGINS_DIR
 downloadWoocommerce() {
-	local PLUGIN_DIR="woocommerce"
+	local PLUGIN_DIR_NAME="woocommerce"
+
+	if [[ ${WC_VERSION:0:1} == "4" || ${WC_VERSION:0:1} == "5" ]]; then
+		# Backward compatibility with WC < 6.0.
+		local PLUGIN_DIR="$PLUGIN_DIR_NAME"
+	else
+		local PLUGIN_DIR="$PLUGIN_DIR_NAME/plugins/$PLUGIN_DIR_NAME"
+	fi
+
 	local PLUGIN_FILE="$PLUGIN_DIR/woocommerce.php"
 
 	if [[ -f "$WP_PLUGINS_DIR/$PLUGIN_FILE" ]]; then
 		# The plugin exists.
-		messageAlreadyInstalled "$PLUGIN_DIR"
+		messageAlreadyInstalled "$PLUGIN_DIR_NAME"
 		return
 	fi
 
-	git clone https://github.com/woocommerce/woocommerce.git "$WP_PLUGINS_DIR/$PLUGIN_DIR"
+	git clone https://github.com/woocommerce/woocommerce.git "$WP_PLUGINS_DIR/$PLUGIN_DIR_NAME"
 	cd "$WP_PLUGINS_DIR/$PLUGIN_DIR"
 
 	if [[ $WC_VERSION == 'dev' ]]; then
@@ -248,10 +256,10 @@ downloadWoocommerce() {
 	composer install --no-dev
 
 	if [[ ! $WC_VERSION ]]; then
-		WC_VERSION=$(getVersionFromPluginFile $PLUGIN_FILE)
+		WC_VERSION=$(getVersionFromPluginFile "$PLUGIN_FILE")
 	fi
 
-	messageSuccessfullyInstalled "$PLUGIN_DIR $WC_VERSION"
+	messageSuccessfullyInstalled "$PLUGIN_DIR_NAME $WC_VERSION"
 	cd "$WORKING_DIR"
 }
 
