@@ -62,11 +62,6 @@ class Bootstrap {
 		require_once $testsDir . '/framework/class-wc-mock-wc-data.php';
 		require_once $testsDir . '/framework/class-wc-payment-token-stub.php';
 
-		// Test cases.
-		require_once $testsDir . '/includes/wp-http-testcase.php'; // WC 3.5+.
-		require_once $testsDir . '/framework/class-wc-unit-test-case.php';
-		require_once $testsDir . '/framework/class-wc-api-unit-test-case.php';
-
 		// Helpers.
 		require_once $testsDir . '/framework/helpers/class-wc-helper-product.php';
 		require_once $testsDir . '/framework/helpers/class-wc-helper-coupon.php';

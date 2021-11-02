@@ -256,6 +256,7 @@ class Bootstrap {
 		define( 'WPSYNTEX_PROJECT_PATH', dirname( $this->testsDir ) . DIRECTORY_SEPARATOR );
 		define( 'WPSYNTEX_TESTS_PATH', $this->testsDir . DIRECTORY_SEPARATOR . $this->suite . DIRECTORY_SEPARATOR );
 		define( 'WPSYNTEX_FIXTURES_PATH', $this->testsDir . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR );
+		define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', WPSYNTEX_PROJECT_PATH . 'vendor/yoast/phpunit-polyfills/' );
 
 		if ( 'Unit' === $this->suite && ! defined( 'ABSPATH' ) ) {
 			define( 'ABSPATH', $this->getWpDir() . DIRECTORY_SEPARATOR );

@@ -59,8 +59,8 @@ trait TestCaseTrait {
 	 *
 	 * @return void
 	 */
-	public function setUp() {
-		parent::setUp();
+	public function set_up() {
+		parent::set_up();
 
 		/**
 		 * `$this->activePlugins` must be an array of paths to plugin files, relative to the plugins directory.
@@ -77,8 +77,8 @@ trait TestCaseTrait {
 	 *
 	 * @return void
 	 */
-	public function tearDown() {
-		parent::tearDown();
+	public function tear_down() {
+		parent::tear_down();
 
 		if ( ! empty( $this->activePlugins ) ) {
 			remove_filter( 'pre_option_active_plugins', [ $this, 'filterActivePlugins' ] );
