@@ -35,7 +35,8 @@ Create a `install-plugins.sh` file that launches all the downloads. Example:
 
 . "$PWD/vendor/wpsyntex/wp-phpunit/bin/wp-download-tools.sh"
 
-mkdir -p $WP_PLUGIN_DIR
+mkdir -p $WP_PLUGINS_DIR
+mkdir -p $WP_THEMES_DIR
 
 # Install WP All Import Pro.
 downloadPluginFromEdd wp-all-import-pro 'WP All Import' https://www.wpallimport.com
