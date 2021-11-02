@@ -269,7 +269,7 @@ use WP_Syntex\Polylang_Phpunit\Unit\AbstractTestCase;
 /**
  * Tests for `WP_Syntex\Polylang_Foobar\barbaz()`.
  */
-class Barbaz extends AbstractTestCase {$$
+class Barbaz extends AbstractTestCase {
 
     /**
      * Stubs the WP native translation functions in the set_up().
