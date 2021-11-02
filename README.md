@@ -35,6 +35,8 @@ Create a `install-plugins.sh` file that launches all the downloads. Example:
 
 . "$PWD/vendor/wpsyntex/wp-phpunit/bin/wp-download-tools.sh"
 
+mkdir -p $WP_PLUGIN_DIR
+
 # Install WP All Import Pro.
 downloadPluginFromEdd wp-all-import-pro 'WP All Import' https://www.wpallimport.com
 
@@ -50,6 +52,8 @@ downloadWoocommerce
 # Install TwentyFourteen.
 downloadThemeFromRepository twentyfourteen
 ```
+
+Note: two variables are available for you to use: `$WP_PLUGINS_DIR` and `$WP_THEMES_DIR`. They contain the path to `tmp/plugins` and `tmp/themes` respectively, where the plugins and themes are installed. Those folders are not created by default so don't forget to do `mkdir -p $WP_PLUGINS_DIR` and/or `mkdir -p $WP_THEMES_DIR` like in the previous example, before using the download functions.
 
 Premium plugins installed from EDD need a bit more attention because they need a license key. You can provide it by creating a `LICENSE-CODES` file at the root of your project and formatted like follow (the file is not versioned with git of course):
 
