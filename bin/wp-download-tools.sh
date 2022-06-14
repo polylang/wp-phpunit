@@ -170,7 +170,7 @@ downloadPolylangForWoocommerce() {
 	git clone https://github.com/polylang/polylang-wc.git "$WP_PLUGINS_DIR/$PLUGIN_DIR"
 	cd "$WP_PLUGINS_DIR/$PLUGIN_DIR"
 
-	if [[ $PLLWC_VERSION == 'dev' ]]; then
+	if [[ ! $PLLWC_VERSION ]] || [[ $PLLWC_VERSION == 'dev' ]]; then
 		git checkout trunk
 	else
 		git checkout $PLLWC_VERSION
@@ -203,13 +203,13 @@ downloadPolylangPro() {
 	git clone https://github.com/polylang/polylang-pro.git "$WP_PLUGINS_DIR/$PLUGIN_DIR"
 	cd "$WP_PLUGINS_DIR/$PLUGIN_DIR"
 
-	if [[ $PLL_VERSION == 'dev' ]]; then
+	if [[ ! $PLL_VERSION ]] || [[ $PLL_VERSION == 'dev' ]]; then
 		git checkout master
 		composer install --no-dev
 	else
 		git checkout $PLL_VERSION
 		# `composer install` if the version is greater than or equal to 2.8.
-		if [[ ! $PLL_VERSION ]] || [[ "$(printf '%s\n' "$PLL_VERSION" "2.8" | sort -V | head -n1)" = "2.8" ]]; then
+		if [[ "$(printf '%s\n' "$PLL_VERSION" "2.8" | sort -V | head -n1)" = "2.8" ]]; then
 			composer install --no-dev
 		fi
 	fi
@@ -249,7 +249,7 @@ downloadWoocommerce() {
 	git clone https://github.com/woocommerce/woocommerce.git "$WP_PLUGINS_DIR/$TARGET_DIR"
 	cd "$WP_PLUGINS_DIR/$TARGET_DIR"
 
-	if [[ $WC_VERSION == 'dev' ]]; then
+	if [[ ! $WC_VERSION ]] || [[ $WC_VERSION == 'dev' ]]; then
 		git checkout trunk
 	else
 		git checkout $WC_VERSION
