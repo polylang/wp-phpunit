@@ -251,8 +251,13 @@ downloadWoocommerce() {
 
 	if [[ ! $WC_VERSION ]] || [[ $WC_VERSION == 'dev' ]]; then
 		git checkout trunk
+		php bin/generate-feature-config.php
 	else
 		git checkout $WC_VERSION
+
+		if [[ ${WC_VERSION:0:1} == "6" && ${WC_VERSION:2:1} > "4" ]]; then
+			php bin/generate-feature-config.php
+		fi
 	fi
 
 	if [[ $MOVE ]]; then
