@@ -6,7 +6,10 @@
 	"type": "library",
 	"minimum-stability": "dev",
 	"config": {
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	},
 	"require": {
 		"php": ">=5.6",
