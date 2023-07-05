@@ -100,7 +100,7 @@ Then you can create composer scripts like these ones for example:
         "install-tests-with-db": "Installs both the WordPress tests suite (with database creation) and the dependencies needed for integration tests, without creating the database.",
         "build": "Builds the project.",
         "build-update": "Builds the project (runs `composer update` instead of `composer install`).",
-        "dist": "Make the zip file to distibute the project release."
+        "dist": "Makes the zip file to distibute the project release."
     }
 }
 ```
