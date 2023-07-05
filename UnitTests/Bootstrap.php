@@ -23,6 +23,13 @@ class Bootstrap {
 	private $suite;
 
 	/**
+	 * Path to the directory of the project.
+	 *
+	 * @var string
+	 */
+	private $rootDir;
+
+	/**
 	 * Path to the directory containing all tests.
 	 *
 	 * @var string
@@ -64,13 +71,15 @@ class Bootstrap {
 	 *
 	 * @param  string                     $testSuite  Directory name of the test suite. Possible values are
 	 *                                                'Integration' and 'Unit'. Default is 'Unit'.
-	 * @param  string                     $testsDir   Path to the directory containing all tests.
+	 * @param  string                     $rootDir    Path to the directory of the project.
+	 * @param  string                     $testsDir   Path to the directory containing the tests, fixtures, etc.
 	 * @param  string                     $phpVersion The PHP version required to run this test suite.
 	 * @param  array<array<mixed>|string> $cliArgs    Addition config for CliArgs.
 	 * @return void
 	 */
-	public function __construct( $testSuite, $testsDir, $phpVersion, array $cliArgs = [] ) {
+	public function __construct( $testSuite, $rootDir, $testsDir, $phpVersion, array $cliArgs = [] ) {
 		$this->suite      = 'Integration' === $testSuite ? $testSuite : 'Unit';
+		$this->rootDir    = rtrim( $rootDir, '/\\' );
 		$this->testsDir   = rtrim( $testsDir, '/\\' );
 		$this->phpVersion = $phpVersion;
 		$this->cliArgs    = $cliArgs;
@@ -253,7 +262,7 @@ class Bootstrap {
 	 * @return void
 	 */
 	private function initConstants() {
-		define( 'WPSYNTEX_PROJECT_PATH', dirname( $this->testsDir ) . DIRECTORY_SEPARATOR );
+		define( 'WPSYNTEX_PROJECT_PATH', $this->rootDir . DIRECTORY_SEPARATOR );
 		define( 'WPSYNTEX_TESTS_PATH', $this->testsDir . DIRECTORY_SEPARATOR . $this->suite . DIRECTORY_SEPARATOR );
 		define( 'WPSYNTEX_FIXTURES_PATH', $this->testsDir . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR );
 		define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', WPSYNTEX_PROJECT_PATH . 'vendor/yoast/phpunit-polyfills/' );

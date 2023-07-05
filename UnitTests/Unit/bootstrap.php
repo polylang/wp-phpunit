@@ -13,10 +13,11 @@ use WP_Syntex\Polylang_Phpunit\Bootstrap;
 /**
  * Bootstraps the unit testing environment.
  *
+ * @param  string $rootDir    Path to the directory of the project.
  * @param  string $testsDir   Path to the directory containing all tests.
  * @param  string $phpVersion The PHP version required to run this test suite.
  * @return void
  */
-function bootstrapSuite( $testsDir, $phpVersion ) {
-	( new Bootstrap( 'unit', $testsDir, $phpVersion ) )->initTestSuite();
+function bootstrapSuite( $rootDir, $testsDir, $phpVersion ) {
+	( new Bootstrap( 'unit', $rootDir, $testsDir, $phpVersion ) )->initTestSuite();
 }
