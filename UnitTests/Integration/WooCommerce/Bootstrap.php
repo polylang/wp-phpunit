@@ -8,7 +8,6 @@
 
 namespace WP_Syntex\Polylang_Phpunit\Integration\WooCommerce;
 
-use Automattic\WooCommerce\Admin\Install as WooInstall;
 use WC_Install;
 
 /**
@@ -35,9 +34,15 @@ class Bootstrap {
 
 		WC_Install::install();
 
-		// Initialize the WC Admin package.
-		WooInstall::create_tables();
-		WooInstall::create_events();
+		if ( class_exists( '\Automattic\WooCommerce\Internal\Admin\Install' ) ) {
+			// WC 6.4.0 to 6.4.1.
+			\Automattic\WooCommerce\Internal\Admin\Install::create_tables();
+			\Automattic\WooCommerce\Internal\Admin\Install::create_events();
+		} elseif ( class_exists( '\Automattic\WooCommerce\Admin\Install' ) ) {
+			// WC 4.0.0 to 6.3.1.
+			\Automattic\WooCommerce\Admin\Install::create_tables();
+			\Automattic\WooCommerce\Admin\Install::create_events();
+		}
 
 		$GLOBALS['wp_roles'] = null;
 		wp_roles();

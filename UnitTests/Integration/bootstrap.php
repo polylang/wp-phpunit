@@ -32,6 +32,13 @@ use WP_Syntex\Polylang_Phpunit\Bootstrap;
  *     }
  * }
  * @return void
+ *
+ * @phpstan-param array{
+ *     plugins?: array<bool|array{
+ *         group?: string,
+ *         init?: callable
+ *     }>
+ * } $args
  */
 function bootstrapSuite( $testsDir, $phpVersion, $args = [] ) {
 	$args      = array_merge(

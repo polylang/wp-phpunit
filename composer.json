@@ -28,6 +28,11 @@
 			"WP_Syntex\\Polylang_Phpunit\\": "UnitTests/"
 		}
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"WP_Syntex\\Polylang_Phpunit\\Fixtures\\": "Fixtures/"
+		}
+	},
 	"scripts": {
 		"cs": "vendor/bin/phpcs",
 		"stan": "vendor/bin/phpstan analyze --memory-limit=1G",

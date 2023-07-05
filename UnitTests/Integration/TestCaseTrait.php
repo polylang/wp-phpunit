@@ -15,7 +15,6 @@ use PLL_Admin_Model;
 use PLL_Install;
 use WP_Syntex\Polylang_Phpunit\TestCaseTrait as GlobalTestCaseTrait;
 use WP_UnitTest_Factory;
-use WP_UnitTestCase;
 
 /**
  * Test Case for all of the integration tests.
@@ -62,11 +61,7 @@ trait TestCaseTrait {
 	public function set_up() {
 		parent::set_up();
 
-		/**
-		 * `$this->activePlugins` must be an array of paths to plugin files, relative to the plugins directory.
-		 *
-		 * @var array<string>
-		 */
+		// `$this->activePlugins` must be an array of paths to plugin files, relative to the plugins directory.
 		if ( ! empty( $this->activePlugins ) ) {
 			add_filter( 'pre_option_active_plugins', [ $this, 'filterActivePlugins' ] );
 		}
@@ -150,18 +145,23 @@ trait TestCaseTrait {
 		}
 
 		// Delete the default categories first.
-		$terms = wp_get_object_terms( get_option( 'default_category' ), 'term_translations' );
+		$default_category = get_option( 'default_category' );
+		$default_category = is_numeric( $default_category ) ? (int) $default_category : 0;
 
-		if ( ! is_wp_error( $terms ) ) {
-			foreach ( $terms as $term ) {
-				wp_delete_term( $term->term_id, 'term_translations' ); // phpcs:ignore Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
+		if ( $default_category ) {
+			$terms = wp_get_object_terms( $default_category, 'term_translations' );
+
+			if ( ! is_wp_error( $terms ) ) {
+				foreach ( $terms as $term ) {
+					wp_delete_term( $term->term_id, 'term_translations' ); // phpcs:ignore Squiz.NamingConventions.ValidVariableName.MemberNotCamelCaps
+				}
 			}
-		}
 
-		$terms = self::$model->term->get_translations( get_option( 'default_category' ) );
+			$terms = self::$model->term->get_translations( $default_category );
 
-		foreach ( $terms as $termId ) {
-			wp_delete_term( $termId, 'category' );
+			foreach ( $terms as $termId ) {
+				wp_delete_term( $termId, 'category' );
+			}
 		}
 
 		foreach ( $languages as $lang ) {

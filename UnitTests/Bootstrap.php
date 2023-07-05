@@ -158,7 +158,7 @@ class Bootstrap {
 	 * @return bool
 	 */
 	public function isGroup( $group ) {
-		$groups = $this->getCliArgsInst()->getArg( 'group' );
+		$groups = (array) $this->getCliArgsInst()->getArg( 'group' );
 		return in_array( $group, $groups, true );
 	}
 
