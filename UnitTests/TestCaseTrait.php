@@ -19,16 +19,6 @@ use WP_Error;
 trait TestCaseTrait {
 
 	/**
-	 * Replacement values for `getTestData()`.
-	 *
-	 * @var array<string|array<string>>
-	 */
-	protected static $testDataReplacements = [
-		'tests'    => [ '/Integration/', '/Unit/' ],
-		'fixtures' => '/Fixtures/',
-	];
-
-	/**
 	 * An instanciated `__return_true()`.
 	 *
 	 * @return bool
@@ -61,7 +51,7 @@ trait TestCaseTrait {
 			self::fail( $error_msg . '$dirPath and/or $fileName not provided.' );
 		}
 
-		$dirPath  = str_replace( static::$testDataReplacements['tests'], static::$testDataReplacements['fixtures'], self::normalizePath( "{$dirPath}/" ) );
+		$dirPath  = str_replace( \WPSYNTEX_TESTS_PATH, \WPSYNTEX_FIXTURES_PATH, self::normalizePath( "{$dirPath}/" ) );
 		$dirPath  = rtrim( $dirPath, '\\/' );
 		$dataPath = "$dirPath/{$fileName}.php";
 
