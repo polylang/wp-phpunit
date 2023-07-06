@@ -51,7 +51,7 @@ trait TestCaseTrait {
 			self::fail( $error_msg . '$dirPath and/or $fileName not provided.' );
 		}
 
-		$dirPath  = str_replace( \WPSYNTEX_TESTS_PATH, \WPSYNTEX_FIXTURES_PATH, self::normalizePath( "{$dirPath}/" ) );
+		$dirPath  = str_replace( \WPSYNTEX_TESTS_PATH, \WPSYNTEX_FIXTURES_PATH, $dirPath . DIRECTORY_SEPARATOR );
 		$dirPath  = rtrim( $dirPath, '\\/' );
 		$dataPath = "$dirPath/{$fileName}.php";
 
