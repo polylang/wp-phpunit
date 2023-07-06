@@ -245,6 +245,7 @@ trait TestCaseTrait {
 
 	/**
 	 * Returns the value of a private/protected property.
+	 * Note: overrides `Yoast\PHPUnitPolyfills\TestCases\TestCase::getPropertyValue()`.
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
