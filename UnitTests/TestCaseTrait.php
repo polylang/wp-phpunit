@@ -24,8 +24,8 @@ trait TestCaseTrait {
 	 * @var array<string|array<string>>
 	 */
 	protected static $testDataReplacements = [
-		'tests'    => [ 'Integration', 'Unit' ],
-		'fixtures' => 'Fixtures',
+		'tests'    => [ '/Integration/', '/Unit/' ],
+		'fixtures' => '/Fixtures/',
 	];
 
 	/**
@@ -51,18 +51,126 @@ trait TestCaseTrait {
 	 *
 	 * @param  string $dirPath  Directory of the test class.
 	 * @param  string $fileName Test data filename without the `.php` extension.
+	 * @param  string $dataSet  Optional. Name of a subset in the data.
 	 * @return array<mixed>     Array of test data.
 	 */
-	public static function getTestData( $dirPath, $fileName ) {
+	public static function getTestData( $dirPath, $fileName, $dataSet = null ) {
+		$error_msg = 'Cannot get data with provider: ';
+
 		if ( empty( $dirPath ) || empty( $fileName ) ) {
-			return [];
+			self::fail( $error_msg . '$dirPath and/or $fileName not provided.' );
 		}
 
-		$dirPath  = str_replace( static::$testDataReplacements['tests'], static::$testDataReplacements['fixtures'], $dirPath );
+		$dirPath  = str_replace( static::$testDataReplacements['tests'], static::$testDataReplacements['fixtures'], self::normalizePath( "{$dirPath}/" ) );
 		$dirPath  = rtrim( $dirPath, '\\/' );
-		$testdata = "$dirPath/{$fileName}.php";
+		$dataPath = "$dirPath/{$fileName}.php";
 
-		return is_readable( $testdata ) ? require $testdata : [];
+		if ( ! is_readable( $dataPath ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the data file '$dataPath' is not readable." );
+		}
+
+		$data = require $dataPath;
+
+		if ( ! is_array( $data ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the data file '$dataPath' does not return an array as it should." );
+		}
+
+		if ( empty( $data ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the data file '$dataPath' returns empty data." );
+		}
+
+		// Return the full data.
+		if ( ! isset( $dataSet ) ) {
+			return $data;
+		}
+
+		// Return only a subset of the data.
+		if ( ! isset( $data[ $dataSet ] ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the data file '$dataPath' does not contain a '$dataSet' subset." );
+		}
+
+		if ( ! is_array( $data[ $dataSet ] ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the '$dataSet' data subset in file '$dataPath' does not return an array as it should." );
+		}
+
+		if ( empty( $data[ $dataSet ] ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the '$dataSet' data subset in file '$dataPath' returns empty data." );
+		}
+
+		return $data[ $dataSet ];
+	}
+
+	/**
+	 * Makes a path relative to the project.
+	 *
+	 * @param string $path A normalized path (use `wp_normalize_path()`).
+	 * @return string
+	 */
+	public static function makePathRelative( $path ) {
+		$rootPath   = self::normalizePath( WPSYNTEX_PROJECT_PATH );
+		$rootPath   = preg_quote( $rootPath, '@' );
+		$resultPath = preg_replace( "@^$rootPath@", '', $path );
+		return is_string( $resultPath ) ? $resultPath : $path;
+	}
+
+	/**
+	 * Normalizes a filesystem path.
+	 * This is a copy of `wp_normalize_path()`, so it can be used in unit tests.
+	 *
+	 * On windows systems, replaces backslashes with forward slashes
+	 * and forces upper-case drive letters.
+	 * Allows for two leading slashes for Windows network shares, but
+	 * ensures that all other duplicate slashes are reduced to a single.
+	 *
+	 * @param string $path Path to normalize.
+	 * @return string Normalized path.
+	 */
+	public static function normalizePath( $path ) {
+		$wrapper = '';
+
+		if ( self::isStream( $path ) ) {
+			list( $wrapper, $path ) = explode( '://', $path, 2 );
+
+			$wrapper .= '://';
+		}
+
+		// Standardize all paths to use '/'.
+		$path = str_replace( '\\', '/', $path );
+
+		// Replace multiple slashes down to a singular, allowing for network shares having two slashes.
+		$path = (string) preg_replace( '|(?<=.)/+|', '/', $path );
+
+		// Windows paths should uppercase the drive letter.
+		if ( ':' === substr( $path, 1, 1 ) ) {
+			$path = ucfirst( $path );
+		}
+
+		return $wrapper . $path;
+	}
+
+	/**
+	 * Tests if a given path is a stream URL.
+	 * This is a copy of `wp_is_stream()`, so it can be used in unit tests.
+	 *
+	 * @param string $path The resource path or URL.
+	 * @return bool True if the path is a stream URL.
+	 */
+	public static function isStream( $path ) {
+		$scheme_separator = strpos( $path, '://' );
+
+		if ( false === $scheme_separator ) {
+			// $path isn't a stream.
+			return false;
+		}
+
+		$stream = substr( $path, 0, $scheme_separator );
+		return in_array( $stream, stream_get_wrappers(), true );
 	}
 
 	/**
