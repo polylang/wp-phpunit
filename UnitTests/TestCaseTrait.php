@@ -49,10 +49,10 @@ trait TestCaseTrait {
 	/**
 	 * Returns the test data, if it exists, for this test class.
 	 *
-	 * @param  string $dirPath  Directory of the test class.
-	 * @param  string $fileName Test data filename without the `.php` extension.
-	 * @param  string $dataSet  Optional. Name of a subset in the data.
-	 * @return array<mixed>     Array of test data.
+	 * @param string $dirPath  Directory of the test class.
+	 * @param string $fileName Test data filename without the `.php` extension.
+	 * @param string $dataSet  Optional. Name of a subset in the data.
+	 * @return mixed[] Array of test data.
 	 */
 	public static function getTestData( $dirPath, $fileName, $dataSet = null ) {
 		$error_msg = 'Cannot get data with provider: ';
@@ -176,7 +176,7 @@ trait TestCaseTrait {
 	/**
 	 * Prepares data for log.
 	 *
-	 * @param  mixed $data Data to log.
+	 * @param mixed $data Data to log.
 	 * @return string
 	 */
 	public static function varExport( $data ) {
@@ -203,8 +203,8 @@ trait TestCaseTrait {
 	/**
 	 * Returns the errors from a `WP_Error` object.
 	 *
-	 * @param  WP_Error|mixed $wpError A `WP_Error` object.
-	 * @return array<mixed>
+	 * @param WP_Error|mixed $wpError A `WP_Error` object.
+	 * @return mixed[]
 	 */
 	public static function getErrors( $wpError ) {
 		if ( ! $wpError instanceof WP_Error ) {
@@ -219,9 +219,9 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
-	 * @param  string        $propertyName Property name for which to gain access.
-	 * @return mixed                       The previous value of the property.
+	 * @param object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param string        $propertyName Property name for which to gain access.
+	 * @return mixed The previous value of the property.
 	 */
 	public static function resetPropertyValue( $objInstance, $propertyName ) {
 		return self::setPropertyValue( $objInstance, $propertyName, null );
@@ -232,10 +232,10 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
-	 * @param  string        $propertyName Property name for which to gain access.
-	 * @param  mixed         $value        The value to set to the property.
-	 * @return mixed                       The previous value of the property.
+	 * @param object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param string        $propertyName Property name for which to gain access.
+	 * @param mixed         $value        The value to set to the property.
+	 * @return mixed The previous value of the property.
 	 */
 	public static function setPropertyValue( $objInstance, $propertyName, $value ) {
 		$ref = self::getReflectiveProperty( $objInstance, $propertyName );
@@ -258,8 +258,8 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
-	 * @param  string        $propertyName Property name for which to gain access.
+	 * @param object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param string        $propertyName Property name for which to gain access.
 	 * @return mixed
 	 */
 	public static function getPropertyValue( $objInstance, $propertyName ) {
@@ -277,10 +277,10 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception upon failure.
 	 *
-	 * @param  object|string $objInstance Class name for a static method, or instance for an instance method.
-	 * @param  string        $methodName  Method name for which to gain access.
-	 * @param  array<mixed>  $args        List of args to pass to the method.
-	 * @return mixed                      The method result.
+	 * @param object|string $objInstance Class name for a static method, or instance for an instance method.
+	 * @param string        $methodName  Method name for which to gain access.
+	 * @param mixed[]       $args        List of args to pass to the method.
+	 * @return mixed The method result.
 	 */
 	public static function invokeMethod( $objInstance, $methodName, $args = [] ) {
 		if ( is_string( $objInstance ) ) {
@@ -300,8 +300,8 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if method does not exist.
 	 *
-	 * @param  object|string $objInstance Class name for a static method, or instance for an instance method.
-	 * @param  string        $methodName  Method name for which to gain access.
+	 * @param object|string $objInstance Class name for a static method, or instance for an instance method.
+	 * @param string        $methodName  Method name for which to gain access.
 	 * @return ReflectionMethod
 	 */
 	public static function getReflectiveMethod( $objInstance, $methodName ) {
@@ -316,8 +316,8 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
-	 * @param  string        $propertyName Property name for which to gain access.
+	 * @param object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param string        $propertyName Property name for which to gain access.
 	 * @return ReflectionProperty
 	 */
 	public static function getReflectiveProperty( $objInstance, $propertyName ) {
@@ -332,9 +332,9 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
-	 * @param  string        $propertyName Property name for which to gain access.
-	 * @param  mixed         $value        The value to set for the property.
+	 * @param object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param string        $propertyName Property name for which to gain access.
+	 * @param mixed         $value        The value to set for the property.
 	 * @return ReflectionProperty
 	 */
 	public static function setReflectiveProperty( $objInstance, $propertyName, $value ) {
