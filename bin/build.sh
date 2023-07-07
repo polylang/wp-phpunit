@@ -5,6 +5,11 @@
 # $2 string '--no-npm' to not run npm.
 
 echo "Installing PHP packages..."
+
+# Include color values (must be done before `rm -rf vendor`).
+PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+. "$PARENT_DIR/colors.sh"
+
 # Make sure to remove all traces of development dependencies.
 rm -rf vendor
 # Update/Install to ensure to have the latest version of the dependencies.
@@ -20,4 +25,4 @@ if [[ '--no-npm' != $2 ]]; then
 	npm install && npm run build
 fi
 
-echo "Build done!"
+echo "${SUCCESS_C}Build done!${NO_C}"

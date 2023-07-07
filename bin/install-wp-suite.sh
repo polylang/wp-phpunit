@@ -6,14 +6,8 @@ INSTALL_DIR="$( cd "$(dirname "$PARENT_DIR")" ; pwd -P )/tmp"
 WP_CORE_DIR="$INSTALL_DIR/wordpress"
 WP_TESTS_DIR="$INSTALL_DIR/wordpress-tests-lib"
 
-# Colors used to print messages to stdout.
-if [[ "$(type -t tput)" == 'file' ]] && [[ $(tput colors) ]]; then
-	INFO_C="$(tput setaf 6)"
-	NO_C="$(tput sgr0)"
-else
-	INFO_C='\033[0;36m'
-	NO_C='\033[0m'
-fi
+# Include color values.
+. "$PARENT_DIR/colors.sh"
 
 # Installs the WordPress test suite by using a local config file.
 # Ex: installWpSuite latest true
