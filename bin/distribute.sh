@@ -4,22 +4,36 @@
 # $1 string A custom plugin slug. Optional.
 # $2 string '--no-npm' to not run npm.
 
-rm -rf vendor/ # Make sure to remove all traces of development dependencies.
-
 echo "Installing PHP packages..."
-composer update --no-dev # composer.lock file is always present because pushed on repository.
+
+# Include color values (must be done before `rm -rf vendor`).
+PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
+. "$PARENT_DIR/colors.sh"
+
+# Make sure to remove all traces of development dependencies.
+rm -rf vendor
+# Update/Install to ensure to have the latest version of the dependencies.
+if [[ -e "composer.lock" ]]; then
+	composer update --no-dev
+else
+	composer install --no-dev
+fi
 
 if [[ $1 ]]; then
-	local PACKAGE_NAME=$1
+	PACKAGE_NAME=$1
 else
-	local PACKAGE_NAME=$(basename -s .git `git config --get remote.origin.url`)
+	PACKAGE_NAME=$(basename -s .git `git config --get remote.origin.url`)
 fi
 
 if [[ '--no-npm' != $2 ]]; then
 	echo "Running build..."
-	npm install && npm run build # minify js and css files.
+	# minify js and css files.
+	npm install && npm run build
 fi
 
-rsync -rc --exclude-from=.distignore . "$PACKAGE_NAME/" --delete --delete-excluded
-zip -r "$PACKAGE_NAME.zip" "$PACKAGE_NAME/*"
-rm -rf "$PACKAGE_NAME/"
+echo "Creating archive file..."
+rsync -rc --delete --delete-excluded --exclude-from='.distignore' . "$PACKAGE_NAME"
+zip -r "${PACKAGE_NAME}.zip" "$PACKAGE_NAME"
+rm -rf "$PACKAGE_NAME"
+
+echo "${SUCCESS_C}Zip file created!${NO_C}"
