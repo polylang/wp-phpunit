@@ -99,68 +99,13 @@ trait TestCaseTrait {
 	/**
 	 * Makes a path relative to the project.
 	 *
-	 * @param string $path A normalized path (use `wp_normalize_path()`).
+	 * @param string $path A path.
 	 * @return string
 	 */
 	public static function makePathRelative( $path ) {
-		$rootPath   = self::normalizePath( WPSYNTEX_PROJECT_PATH );
-		$rootPath   = preg_quote( $rootPath, '@' );
+		$rootPath   = preg_quote( WPSYNTEX_PROJECT_PATH, '@' );
 		$resultPath = preg_replace( "@^$rootPath@", '', $path );
 		return is_string( $resultPath ) ? $resultPath : $path;
-	}
-
-	/**
-	 * Normalizes a filesystem path.
-	 * This is a copy of `wp_normalize_path()`, so it can be used in unit tests.
-	 *
-	 * On windows systems, replaces backslashes with forward slashes
-	 * and forces upper-case drive letters.
-	 * Allows for two leading slashes for Windows network shares, but
-	 * ensures that all other duplicate slashes are reduced to a single.
-	 *
-	 * @param string $path Path to normalize.
-	 * @return string Normalized path.
-	 */
-	public static function normalizePath( $path ) {
-		$wrapper = '';
-
-		if ( self::isStream( $path ) ) {
-			list( $wrapper, $path ) = explode( '://', $path, 2 );
-
-			$wrapper .= '://';
-		}
-
-		// Standardize all paths to use '/'.
-		$path = str_replace( '\\', '/', $path );
-
-		// Replace multiple slashes down to a singular, allowing for network shares having two slashes.
-		$path = (string) preg_replace( '|(?<=.)/+|', '/', $path );
-
-		// Windows paths should uppercase the drive letter.
-		if ( ':' === substr( $path, 1, 1 ) ) {
-			$path = ucfirst( $path );
-		}
-
-		return $wrapper . $path;
-	}
-
-	/**
-	 * Tests if a given path is a stream URL.
-	 * This is a copy of `wp_is_stream()`, so it can be used in unit tests.
-	 *
-	 * @param string $path The resource path or URL.
-	 * @return bool True if the path is a stream URL.
-	 */
-	public static function isStream( $path ) {
-		$scheme_separator = strpos( $path, '://' );
-
-		if ( false === $scheme_separator ) {
-			// $path isn't a stream.
-			return false;
-		}
-
-		$stream = substr( $path, 0, $scheme_separator );
-		return in_array( $stream, stream_get_wrappers(), true );
 	}
 
 	/**
