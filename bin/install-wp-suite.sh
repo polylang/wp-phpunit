@@ -2,9 +2,8 @@
 
 WORKING_DIR="$PWD"
 PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
-INSTALL_DIR="$( cd "$(dirname "$PARENT_DIR")" ; pwd -P )/tmp"
-WP_CORE_DIR="$INSTALL_DIR/wordpress"
-WP_TESTS_DIR="$INSTALL_DIR/wordpress-tests-lib"
+WP_CORE_DIR="$WORKING_DIR/tmp/wordpress"
+WP_TESTS_DIR="$WORKING_DIR/tmp/wordpress-tests-lib"
 
 # Include color values.
 . "$PARENT_DIR/colors.sh"
