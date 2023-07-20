@@ -99,18 +99,17 @@ class Bootstrap {
 			$_SERVER['SERVER_NAME'] = 'localhost';
 		}
 
-		if ( 'Unit' === $this->suite ) {
-			/**
-			 * Unit tests:
-			 * Load Patchwork before everything else in order to allow us to redefine WordPress, 3rd party, and plugin's
-			 * functions.
-			 */
-			$patchworkPath = __DIR__ . '/../vendor/antecedent/patchwork/Patchwork.php';
+		/**
+		 * Load Patchwork before everything else in order to allow us to redefine WordPress, 3rd party, and plugin's
+		 * functions.
+		 */
+		$patchworkPath = __DIR__ . '/../vendor/antecedent/patchwork/Patchwork.php';
 
-			if ( file_exists( $patchworkPath ) ) {
-				require_once $patchworkPath;
-			}
-		} else {
+		if ( file_exists( $patchworkPath ) ) {
+			require_once $patchworkPath;
+		}
+
+		if ( 'Integration' === $this->suite ) {
 			/**
 			 * Integration tests:
 			 * Give access to tests_add_filter() function.
