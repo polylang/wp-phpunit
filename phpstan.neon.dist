@@ -8,15 +8,12 @@ parameters:
 		- %currentWorkingDirectory%/Fixtures
 		- %currentWorkingDirectory%/UnitTests
 	bootstrapFiles:
+		- phpstan-bootstrap.php
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-packages-stubs.php
 	scanDirectories:
 		- tmp/wordpress-tests-lib/includes
 	ignoreErrors:
-		- '#^Constant WPSYNTEX_PROJECT_PATH not found\.$#'
-		- '#^Constant WPSYNTEX_FIXTURES_PATH not found\.$#'
-		- '#^Constant WPSYNTEX_TESTS_PATH not found\.$#'
-
 		# Ignored because false positive: $pluginArgs['group'] cannot be a string in `foreach ( $pluginArgs['group'] as $group )`.
 		-
 			message: "#^Argument of an invalid type array\\<int, string\\>\\|string supplied for foreach, only iterables are supported\\.$#"
