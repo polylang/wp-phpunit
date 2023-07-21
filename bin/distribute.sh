@@ -28,7 +28,7 @@ fi
 if [[ '--no-npm' != $2 ]]; then
 	echo "Running build..."
 	# minify js and css files.
-	npm install && npm run build
+	npm install --package-lock-only && npm ci && npm run build
 fi
 
 echo "Creating archive file..."
