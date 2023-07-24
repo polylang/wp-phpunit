@@ -9,21 +9,26 @@
 namespace WP_Syntex\Polylang_Phpunit\Fixtures;
 
 use WP_Syntex\Polylang_Phpunit\Integration\TestCaseTrait;
-use WP_UnitTestCase;
+use Yoast\PHPUnitPolyfills\TestCases\TestCase;
 
 /**
  * Dummy test case so PHPStan can analyze TestCaseTrait.
  */
-class DummyTestCase extends WP_UnitTestCase {
-
-	/**
-	 * List of active plugins.
-	 *
-	 * @var array<string>
-	 */
-	protected $activePlugins = [
-		'wp-all-import-pro/wp-all-import-pro.php',
-	];
+class DummyTestCase extends TestCase {
 
 	use TestCaseTrait;
+
+	/**
+	 * Sets up the fixture, for example, open a network connection.
+	 *
+	 * @return void
+	 */
+	protected function setUp(): void {
+		// Must be set before calling `parent::set_up()`.
+		$this->activePlugins = [
+			'wp-all-import-pro/wp-all-import-pro.php',
+		];
+
+		parent::setUp();
+	}
 }

@@ -20,6 +20,7 @@ use WP_UnitTest_Factory;
  * Test Case for all of the integration tests.
  */
 trait TestCaseTrait {
+
 	use GlobalTestCaseTrait;
 
 	/**
@@ -28,6 +29,14 @@ trait TestCaseTrait {
 	 * @var PLL_Admin_Model
 	 */
 	protected static $model;
+
+	/**
+	 * List of active plugins.
+	 * Array of paths to plugin files, relative to the plugins directory.
+	 *
+	 * @var array<non-falsy-string>
+	 */
+	protected $activePlugins = [];
 
 	/**
 	 * Initialization before all tests run.
@@ -61,7 +70,6 @@ trait TestCaseTrait {
 	public function set_up() {
 		parent::set_up();
 
-		// `$this->activePlugins` must be an array of paths to plugin files, relative to the plugins directory.
 		if ( ! empty( $this->activePlugins ) ) {
 			add_filter( 'pre_option_active_plugins', [ $this, 'filterActivePlugins' ] );
 		}
