@@ -1,7 +1,7 @@
 <?php
 /**
  * Dummy test case so PHPStan can analyze TestCaseTrait.
- * php version 5.6
+ * php version 7.0
  *
  * @package WP_Syntex\Polylang_Phpunit\Fixtures
  */

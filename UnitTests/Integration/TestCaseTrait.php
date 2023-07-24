@@ -1,7 +1,7 @@
 <?php
 /**
  * Test Case for all of the integration tests.
- * php version 5.6
+ * php version 7.0
  *
  * @package WP_Syntex\Polylang_Phpunit\Integration
  */

@@ -115,7 +115,7 @@ Example for your `bootstrap.php` file:
 <?php
 /**
  * Bootstraps the Polylang Foobar integration tests
- * php version 5.6
+ * php version 7.0
  *
  * @package WP_Syntex\Polylang_Foobar\Tests\Integration
  */
@@ -128,7 +128,7 @@ require dirname( dirname( __DIR__ ) ) . '/vendor/wpsyntex/wp-phpunit/UnitTests/I
 
 bootstrapSuite(
     dirname( __DIR__ ), // Path to the directory containing all tests.
-    '5.6.0', // The PHP version required to run this test suite.
+    '7.0.0', // The PHP version required to run this test suite.
     [
         'plugins' => [
             'polylang-pro/polylang.php'                            => true,
@@ -161,7 +161,7 @@ Hint: if you need to create your own methods `set_up()`, `wpSetUpBeforeClass`, e
 <?php
 /**
  * Test Case for all of the integration tests.
- * php version 5.6
+ * php version 7.0
  *
  * @package WP_Syntex\Polylang_Foobar\Tests\Integration
  */
@@ -196,7 +196,7 @@ If you need to list some plugins among the "active ones" (`get_option( 'active_p
 <?php
 /**
  * Test Case for all of the integration tests.
- * php version 5.6
+ * php version 7.0
  *
  * @package WP_Syntex\Polylang_Foobar\Tests\Integration
  */
@@ -236,7 +236,7 @@ Example for your `bootstrap.php` file:
 <?php
 /**
  * Bootstraps the Polylang Foobar Unit Tests.
- * php version 5.6
+ * php version 7.0
  *
  * @package WP_Syntex\Polylang_Foobar\Tests\Unit
  */
@@ -247,7 +247,7 @@ use function WP_Syntex\Polylang_Phpunit\Unit\bootstrapSuite;
 
 require dirname( dirname( __DIR__ ) ) . '/vendor/wpsyntex/wp-phpunit/UnitTests/Unit/bootstrap.php';
 
-bootstrapSuite( dirname( __DIR__ ), '5.6.0' );
+bootstrapSuite( dirname( __DIR__ ), '7.0.0' );
 ```
 
 #### Extend the abstract class in your unit tests
@@ -262,7 +262,7 @@ In your tests you can mock [WordPress' most common functions](https://github.com
 <?php
 /**
  * Tests for `WP_Syntex\Polylang_Foobar\barbaz()`.
- * php version 5.6
+ * php version 7.0
  *
  * @package WP_Syntex\Polylang_Foobar\Tests\Unit
  */
