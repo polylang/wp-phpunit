@@ -103,7 +103,7 @@ class Bootstrap {
 		 * Load Patchwork before everything else in order to allow us to redefine WordPress, 3rd party, and plugin's
 		 * functions.
 		 */
-		$patchworkPath = __DIR__ . '/../vendor/antecedent/patchwork/Patchwork.php';
+		$patchworkPath = dirname( __DIR__ ) . '/vendor/antecedent/patchwork/Patchwork.php';
 
 		if ( file_exists( $patchworkPath ) ) {
 			require_once $patchworkPath;
