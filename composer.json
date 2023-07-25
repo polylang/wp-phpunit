@@ -40,8 +40,8 @@
 			"@cs",
 			"@stan"
 		],
-		"install-suite": "bin/install-wp-suite.sh",
-		"install-suite-with-db": "bin/install-wp-suite.sh latest true"
+		"install-suite": "bash bin/install-wp-suite.sh",
+		"install-suite-with-db": "bash bin/install-wp-suite.sh latest true"
 	},
 	"scripts-descriptions": {
 		"cs": "Runs PHPCS linter.",
