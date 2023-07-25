@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
 # Builds the project (Composer, npm).
 #
 # $1 string Whether to run composer install or update. '-u' or '--update' to update, anything else to install.

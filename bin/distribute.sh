@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # Creates a zip file of the project.
 #
 # $1 string A custom plugin slug. Optional.
