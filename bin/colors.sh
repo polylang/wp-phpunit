@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 # Colors used to print messages to stdout.
+# See `UnitTests/functions.php`.
 if [[ "$(type -t tput)" == 'file' ]] && [[ $(tput colors) ]]; then
 	INFO_C="$(tput setaf 6)"
 	SUCCESS_C="$(tput setaf 2)"
