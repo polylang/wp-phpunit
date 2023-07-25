@@ -3,12 +3,19 @@ includes:
 	- vendor/wpsyntex/polylang-phpstan/extension.neon
 parameters:
 	level: max
+	treatPhpDocTypesAsCertain: false
 	paths:
+		- %currentWorkingDirectory%/Fixtures
 		- %currentWorkingDirectory%/UnitTests
 	bootstrapFiles:
+		- phpstan-bootstrap.php
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-stubs.php
 		- vendor/php-stubs/woocommerce-stubs/woocommerce-packages-stubs.php
 	scanDirectories:
 		- tmp/wordpress-tests-lib/includes
 	ignoreErrors:
-		- '#^Constant WPSYNTEX_PROJECT_PATH not found\.$#'
+		# Ignored because false positive: $pluginArgs['group'] cannot be a string in `foreach ( $pluginArgs['group'] as $group )`.
+		-
+			message: "#^Argument of an invalid type array\\<int, string\\>\\|string supplied for foreach, only iterables are supported\\.$#"
+			count: 1
+			path: UnitTests/Integration/bootstrap.php

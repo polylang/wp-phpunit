@@ -1,7 +1,7 @@
 <?php
 /**
  * Bootstraps the integration tests
- * php version 5.6
+ * php version 7.0
  *
  * @package WP_Syntex\Polylang_Phpunit\Integration
  */
@@ -13,6 +13,7 @@ use WP_Syntex\Polylang_Phpunit\Bootstrap;
 /**
  * Bootstraps the integration testing environment with WordPress, plugins, and other dependencies.
  *
+ * @param  string       $rootDir    Path to the directory of the project.
  * @param  string       $testsDir   Path to the directory containing all tests.
  * @param  string       $phpVersion The PHP version required to run this test suite.
  * @param  array<mixed> $args       {
@@ -32,20 +33,28 @@ use WP_Syntex\Polylang_Phpunit\Bootstrap;
  *     }
  * }
  * @return void
+ *
+ * @phpstan-param array{
+ *     plugins?: array<bool|array{
+ *         group?: string,
+ *         init?: callable
+ *     }>
+ * } $args
  */
-function bootstrapSuite( $testsDir, $phpVersion, $args = [] ) {
+function bootstrapSuite( $rootDir, $testsDir, $phpVersion, $args = [] ) {
 	$args      = array_merge(
 		[
 			'plugins' => [],
 		],
 		$args
 	);
-	$bootstrap = new Bootstrap( 'Integration', $testsDir, $phpVersion );
+	$bootstrap = new Bootstrap( 'Integration', $rootDir, $testsDir, $phpVersion );
 
 	$bootstrap->initTestSuite();
 
-	$wpPluginsDir = dirname( $testsDir ) . '/tmp/plugins/';
-	$wpThemesDir  = dirname( $testsDir ) . '/tmp/themes';
+	$rootDir      = rtrim( $rootDir, '/\\' );
+	$wpPluginsDir = "{$rootDir}/tmp/plugins/";
+	$wpThemesDir  = "{$rootDir}/tmp/themes";
 	$allPlugins   = []; // Plugins that will be loaded. Format: {pluginPath} => {initCallback} (empty string if no callback is needed).
 	$groups       = []; // Cache saying if groups are requested (with `--group=foo`). Format: {groupName} => {isRequested}.
 

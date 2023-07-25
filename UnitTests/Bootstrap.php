@@ -1,7 +1,7 @@
 <?php
 /**
  * Class to use to bootstrap tests.
- * php version 5.6
+ * php version 7.0
  *
  * @package WP_Syntex\Polylang_Phpunit
  */
@@ -21,6 +21,13 @@ class Bootstrap {
 	 * @var string
 	 */
 	private $suite;
+
+	/**
+	 * Path to the directory of the project.
+	 *
+	 * @var string
+	 */
+	private $rootDir;
 
 	/**
 	 * Path to the directory containing all tests.
@@ -64,13 +71,15 @@ class Bootstrap {
 	 *
 	 * @param  string                     $testSuite  Directory name of the test suite. Possible values are
 	 *                                                'Integration' and 'Unit'. Default is 'Unit'.
-	 * @param  string                     $testsDir   Path to the directory containing all tests.
+	 * @param  string                     $rootDir    Path to the directory of the project.
+	 * @param  string                     $testsDir   Path to the directory containing the tests, fixtures, etc.
 	 * @param  string                     $phpVersion The PHP version required to run this test suite.
 	 * @param  array<array<mixed>|string> $cliArgs    Addition config for CliArgs.
 	 * @return void
 	 */
-	public function __construct( $testSuite, $testsDir, $phpVersion, array $cliArgs = [] ) {
+	public function __construct( $testSuite, $rootDir, $testsDir, $phpVersion, array $cliArgs = [] ) {
 		$this->suite      = 'Integration' === $testSuite ? $testSuite : 'Unit';
+		$this->rootDir    = rtrim( $rootDir, '/\\' );
 		$this->testsDir   = rtrim( $testsDir, '/\\' );
 		$this->phpVersion = $phpVersion;
 		$this->cliArgs    = $cliArgs;
@@ -90,18 +99,17 @@ class Bootstrap {
 			$_SERVER['SERVER_NAME'] = 'localhost';
 		}
 
-		if ( 'Unit' === $this->suite ) {
-			/**
-			 * Unit tests:
-			 * Load Patchwork before everything else in order to allow us to redefine WordPress, 3rd party, and plugin's
-			 * functions.
-			 */
-			$patchworkPath = __DIR__ . '/../vendor/antecedent/patchwork/Patchwork.php';
+		/**
+		 * Load Patchwork before everything else in order to allow us to redefine WordPress, 3rd party, and plugin's
+		 * functions.
+		 */
+		$patchworkPath = dirname( __DIR__ ) . '/vendor/antecedent/patchwork/Patchwork.php';
 
-			if ( file_exists( $patchworkPath ) ) {
-				require_once $patchworkPath;
-			}
-		} else {
+		if ( file_exists( $patchworkPath ) ) {
+			require_once $patchworkPath;
+		}
+
+		if ( 'Integration' === $this->suite ) {
 			/**
 			 * Integration tests:
 			 * Give access to tests_add_filter() function.
@@ -158,7 +166,7 @@ class Bootstrap {
 	 * @return bool
 	 */
 	public function isGroup( $group ) {
-		$groups = $this->getCliArgsInst()->getArg( 'group' );
+		$groups = (array) $this->getCliArgsInst()->getArg( 'group' );
 		return in_array( $group, $groups, true );
 	}
 
@@ -253,9 +261,10 @@ class Bootstrap {
 	 * @return void
 	 */
 	private function initConstants() {
-		define( 'WPSYNTEX_PROJECT_PATH', dirname( $this->testsDir ) . DIRECTORY_SEPARATOR );
+		define( 'WPSYNTEX_PROJECT_PATH', $this->rootDir . DIRECTORY_SEPARATOR );
 		define( 'WPSYNTEX_TESTS_PATH', $this->testsDir . DIRECTORY_SEPARATOR . $this->suite . DIRECTORY_SEPARATOR );
 		define( 'WPSYNTEX_FIXTURES_PATH', $this->testsDir . DIRECTORY_SEPARATOR . 'Fixtures' . DIRECTORY_SEPARATOR );
+		define( 'WPSYNTEX_TESTSUITE_PATH', $this->getWpTestsDir() . DIRECTORY_SEPARATOR );
 		define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', WPSYNTEX_PROJECT_PATH . 'vendor/yoast/phpunit-polyfills/' );
 
 		if ( 'Unit' === $this->suite && ! defined( 'ABSPATH' ) ) {

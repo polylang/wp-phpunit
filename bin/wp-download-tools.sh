@@ -11,18 +11,8 @@ DEPS_DIR="$WORKING_DIR/tmp"
 WP_PLUGINS_DIR="$DEPS_DIR/plugins"
 WP_THEMES_DIR="$DEPS_DIR/themes"
 
-# Colors used to print messages to stdout.
-if [[ "$(type -t tput)" == 'file' ]] && [[ $(tput colors) ]]; then
-	INFO_C="$(tput setaf 6)"
-	SUCCESS_C="$(tput setaf 2)"
-	ERROR_C="$(tput setaf 1)"
-	NO_C="$(tput sgr0)"
-else
-	INFO_C='\033[0;36m'
-	SUCCESS_C='\033[0;32m'
-	ERROR_C='\033[0;31m'
-	NO_C='\033[0m'
-fi
+# Include color values.
+. "$PARENT_DIR/colors.sh"
 
 # Include download tools.
 . "$PARENT_DIR/generic-download-tools.sh"

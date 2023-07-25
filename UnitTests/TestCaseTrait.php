@@ -1,7 +1,7 @@
 <?php
 /**
  * Generic trait for all tests.
- * php version 5.6
+ * php version 7.0
  *
  * @package WP_Syntex\Polylang_Phpunit
  */
@@ -17,16 +17,6 @@ use WP_Error;
  * Generic trait for all tests.
  */
 trait TestCaseTrait {
-
-	/**
-	 * Replacement values for `getTestData()`.
-	 *
-	 * @var array<string|array<string>>
-	 */
-	protected static $testDataReplacements = [
-		'tests'    => [ 'Integration', 'Unit' ],
-		'fixtures' => 'Fixtures',
-	];
 
 	/**
 	 * An instanciated `__return_true()`.
@@ -49,26 +39,79 @@ trait TestCaseTrait {
 	/**
 	 * Returns the test data, if it exists, for this test class.
 	 *
-	 * @param  string $dirPath  Directory of the test class.
-	 * @param  string $fileName Test data filename without the `.php` extension.
-	 * @return array<mixed>     Array of test data.
+	 * @param string $dirPath  Directory of the test class.
+	 * @param string $fileName Test data filename without the `.php` extension.
+	 * @param string $dataSet  Optional. Name of a subset in the data.
+	 * @return mixed[] Array of test data.
 	 */
-	public static function getTestData( $dirPath, $fileName ) {
+	public static function getTestData( $dirPath, $fileName, $dataSet = null ) {
+		$error_msg = 'Cannot get data with provider: ';
+
 		if ( empty( $dirPath ) || empty( $fileName ) ) {
-			return [];
+			self::fail( $error_msg . '$dirPath and/or $fileName not provided.' );
 		}
 
-		$dirPath  = str_replace( static::$testDataReplacements['tests'], static::$testDataReplacements['fixtures'], $dirPath );
+		$dirPath  = str_replace( \WPSYNTEX_TESTS_PATH, \WPSYNTEX_FIXTURES_PATH, $dirPath . DIRECTORY_SEPARATOR );
 		$dirPath  = rtrim( $dirPath, '\\/' );
-		$testdata = "$dirPath/{$fileName}.php";
+		$dataPath = "$dirPath/{$fileName}.php";
 
-		return is_readable( $testdata ) ? require $testdata : [];
+		if ( ! is_readable( $dataPath ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the data file '$dataPath' is not readable." );
+		}
+
+		$data = require $dataPath;
+
+		if ( ! is_array( $data ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the data file '$dataPath' does not return an array as it should." );
+		}
+
+		if ( empty( $data ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the data file '$dataPath' returns empty data." );
+		}
+
+		// Return the full data.
+		if ( ! isset( $dataSet ) ) {
+			return $data;
+		}
+
+		// Return only a subset of the data.
+		if ( ! isset( $data[ $dataSet ] ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the data file '$dataPath' does not contain a '$dataSet' subset." );
+		}
+
+		if ( ! is_array( $data[ $dataSet ] ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the '$dataSet' data subset in file '$dataPath' does not return an array as it should." );
+		}
+
+		if ( empty( $data[ $dataSet ] ) ) {
+			$dataPath = self::makePathRelative( $dataPath );
+			self::fail( $error_msg . "the '$dataSet' data subset in file '$dataPath' returns empty data." );
+		}
+
+		return $data[ $dataSet ];
+	}
+
+	/**
+	 * Makes a path relative to the project.
+	 *
+	 * @param string $path A path.
+	 * @return string
+	 */
+	public static function makePathRelative( $path ) {
+		$rootPath   = preg_quote( WPSYNTEX_PROJECT_PATH, '@' );
+		$resultPath = preg_replace( "@^$rootPath@", '', $path );
+		return is_string( $resultPath ) ? $resultPath : $path;
 	}
 
 	/**
 	 * Prepares data for log.
 	 *
-	 * @param  mixed $data Data to log.
+	 * @param mixed $data Data to log.
 	 * @return string
 	 */
 	public static function varExport( $data ) {
@@ -95,8 +138,8 @@ trait TestCaseTrait {
 	/**
 	 * Returns the errors from a `WP_Error` object.
 	 *
-	 * @param  WP_Error|mixed $wpError A `WP_Error` object.
-	 * @return array<mixed>
+	 * @param WP_Error|mixed $wpError A `WP_Error` object.
+	 * @return mixed[]
 	 */
 	public static function getErrors( $wpError ) {
 		if ( ! $wpError instanceof WP_Error ) {
@@ -111,9 +154,9 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
-	 * @param  string        $propertyName Property name for which to gain access.
-	 * @return mixed                       The previous value of the property.
+	 * @param object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param string        $propertyName Property name for which to gain access.
+	 * @return mixed The previous value of the property.
 	 */
 	public static function resetPropertyValue( $objInstance, $propertyName ) {
 		return self::setPropertyValue( $objInstance, $propertyName, null );
@@ -124,10 +167,10 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
-	 * @param  string        $propertyName Property name for which to gain access.
-	 * @param  mixed         $value        The value to set to the property.
-	 * @return mixed                       The previous value of the property.
+	 * @param object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param string        $propertyName Property name for which to gain access.
+	 * @param mixed         $value        The value to set to the property.
+	 * @return mixed The previous value of the property.
 	 */
 	public static function setPropertyValue( $objInstance, $propertyName, $value ) {
 		$ref = self::getReflectiveProperty( $objInstance, $propertyName );
@@ -147,11 +190,12 @@ trait TestCaseTrait {
 
 	/**
 	 * Returns the value of a private/protected property.
+	 * Note: overrides `Yoast\PHPUnitPolyfills\TestCases\TestCase::getPropertyValue()`.
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
-	 * @param  string        $propertyName Property name for which to gain access.
+	 * @param object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param string        $propertyName Property name for which to gain access.
 	 * @return mixed
 	 */
 	public static function getPropertyValue( $objInstance, $propertyName ) {
@@ -169,10 +213,10 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception upon failure.
 	 *
-	 * @param  object|string $objInstance Class name for a static method, or instance for an instance method.
-	 * @param  string        $methodName  Method name for which to gain access.
-	 * @param  array<mixed>  $args        List of args to pass to the method.
-	 * @return mixed                      The method result.
+	 * @param object|string $objInstance Class name for a static method, or instance for an instance method.
+	 * @param string        $methodName  Method name for which to gain access.
+	 * @param mixed[]       $args        List of args to pass to the method.
+	 * @return mixed The method result.
 	 */
 	public static function invokeMethod( $objInstance, $methodName, $args = [] ) {
 		if ( is_string( $objInstance ) ) {
@@ -192,8 +236,8 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if method does not exist.
 	 *
-	 * @param  object|string $objInstance Class name for a static method, or instance for an instance method.
-	 * @param  string        $methodName  Method name for which to gain access.
+	 * @param object|string $objInstance Class name for a static method, or instance for an instance method.
+	 * @param string        $methodName  Method name for which to gain access.
 	 * @return ReflectionMethod
 	 */
 	public static function getReflectiveMethod( $objInstance, $methodName ) {
@@ -208,8 +252,8 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
-	 * @param  string        $propertyName Property name for which to gain access.
+	 * @param object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param string        $propertyName Property name for which to gain access.
 	 * @return ReflectionProperty
 	 */
 	public static function getReflectiveProperty( $objInstance, $propertyName ) {
@@ -224,9 +268,9 @@ trait TestCaseTrait {
 	 *
 	 * @throws ReflectionException Throws an exception if property does not exist.
 	 *
-	 * @param  object|string $objInstance  Class name for a static property, or instance for an instance property.
-	 * @param  string        $propertyName Property name for which to gain access.
-	 * @param  mixed         $value        The value to set for the property.
+	 * @param object|string $objInstance  Class name for a static property, or instance for an instance property.
+	 * @param string        $propertyName Property name for which to gain access.
+	 * @param mixed         $value        The value to set for the property.
 	 * @return ReflectionProperty
 	 */
 	public static function setReflectiveProperty( $objInstance, $propertyName, $value ) {

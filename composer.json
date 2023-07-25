@@ -6,10 +6,13 @@
 	"type": "library",
 	"minimum-stability": "dev",
 	"config": {
-		"sort-packages": true
+		"sort-packages": true,
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	},
 	"require": {
-		"php": ">=5.6",
+		"php": ">=7.0",
 		"cheprasov/php-cli-args": "^3.0",
 		"symfony/console": "^3.4 || ^4.4",
 		"yoast/wp-test-utils": "^1.0.0"
@@ -25,6 +28,11 @@
 			"WP_Syntex\\Polylang_Phpunit\\": "UnitTests/"
 		}
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"WP_Syntex\\Polylang_Phpunit\\Fixtures\\": "Fixtures/"
+		}
+	},
 	"scripts": {
 		"cs": "vendor/bin/phpcs",
 		"stan": "vendor/bin/phpstan analyze --memory-limit=1G",
@@ -32,8 +40,8 @@
 			"@cs",
 			"@stan"
 		],
-		"install-suite": "bin/install-wp-suite.sh",
-		"install-suite-with-db": "bin/install-wp-suite.sh latest true"
+		"install-suite": "bash bin/install-wp-suite.sh",
+		"install-suite-with-db": "bash bin/install-wp-suite.sh latest true"
 	},
 	"scripts-descriptions": {
 		"cs": "Runs PHPCS linter.",
