@@ -1,6 +1,14 @@
 #!/usr/bin/env bash
 
-WORKING_DIR="$PWD"
+# Is cmd command available ? Windows only.
+if [ -x "$(command -v cmd)" ]; then
+	# pwd -W option available in Git bash for windows.
+	# We get current folder path with slash as separator.
+	WORKING_DIR=$(pwd -W)
+else
+	WORKING_DIR="$PWD"
+fi
+
 PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 WP_CORE_DIR="$WORKING_DIR/tmp/wordpress"
 WP_TESTS_DIR="$WORKING_DIR/tmp/wordpress-tests-lib"
