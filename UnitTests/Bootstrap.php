@@ -115,6 +115,12 @@ class Bootstrap {
 			 * Give access to tests_add_filter() function.
 			 */
 			require_once $this->getWpTestsDir() . '/includes/functions.php';
+		} else {
+			/**
+			 * Unit tests:
+			 * Give access to WP's compatibility functions like `str_ends_with()`.
+			 */
+			require_once  ABSPATH . 'wp-includes/compat.php';
 		}
 	}
 
