@@ -273,8 +273,14 @@ class Bootstrap {
 		define( 'WPSYNTEX_TESTSUITE_PATH', $this->getWpTestsDir() . DIRECTORY_SEPARATOR );
 		define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', WPSYNTEX_PROJECT_PATH . 'vendor/yoast/phpunit-polyfills/' );
 
-		if ( 'Unit' === $this->suite && ! defined( 'ABSPATH' ) ) {
-			define( 'ABSPATH', $this->getWpDir() . DIRECTORY_SEPARATOR );
+		if ( 'Unit' === $this->suite ) {
+			if ( ! defined( 'ABSPATH' ) ) {
+				define( 'ABSPATH', $this->getWpDir() . DIRECTORY_SEPARATOR );
+			}
+
+			if ( ! defined( 'WPINC' ) ) {
+				define( 'WPINC', 'wp-includes' );
+			}
 		}
 
 		if ( ! defined( 'WPSYNTEX_IS_TESTING' ) ) {
