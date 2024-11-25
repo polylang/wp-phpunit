@@ -116,9 +116,9 @@ license $PLUGIN_SLUG:none"
 	local HEADERS='Content-Type: application/x-www-form-urlencoded;Cache-Control: no-cache;Accept: application/json;Connection: keep-alive'
 
 	if [[ `which curl` ]]; then
-		local INFO=$(curl -d "$PARAMS" -H "$HADERS" -X POST -s "$URL")
+		local INFO=$(curl -d "$PARAMS" -H "$HEADERS" -X POST -s "$URL")
 	elif [[ `which wget` ]]; then
-		local INFO=$(wget --post-data "$PARAMS" --header "$HADERS" "$URL" -q -O -)
+		local INFO=$(wget --post-data "$PARAMS" --header "$HEADERS" "$URL" -q -O -)
 	fi
 
 	local URL=$(getPackageUrl "$INFO")
