@@ -48,13 +48,20 @@ downloadPluginFromRepository() {
 	fi
 
 	# Download the plugin.
+	local ZIP_PATH="$DOWNLOADS_DIR/$PLUGIN_SLUG.zip"
+
 	if [[ $VERSION == 'trunk' ]]; then
-		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.zip $DOWNLOADS_DIR/$PLUGIN_SLUG.zip
+		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.zip $ZIP_PATH
 	else
-		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.$VERSION.zip $DOWNLOADS_DIR/$PLUGIN_SLUG.zip
+		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.$VERSION.zip $ZIP_PATH
 	fi
 
-	unzip -q $DOWNLOADS_DIR/$PLUGIN_SLUG.zip -d $WP_PLUGINS_DIR
+	if [[ ! -f "$ZIP_PATH" ]]; then
+		messageInstallationFailure "$PLUGIN_SLUG $VERSION"
+		return
+	fi
+
+	unzip -q $ZIP_PATH -d $WP_PLUGINS_DIR
 
 	if [[ $? == 0 ]] ; then
 		messageSuccessfullyInstalled "$PLUGIN_SLUG $VERSION"
@@ -131,8 +138,16 @@ license $PLUGIN_SLUG:none"
 	fi
 
 	# Download the plugin.
-	download $URL $DOWNLOADS_DIR/$PLUGIN_SLUG.zip
-	unzip -q $DOWNLOADS_DIR/$PLUGIN_SLUG.zip -d $WP_PLUGINS_DIR
+	local ZIP_PATH="$DOWNLOADS_DIR/$PLUGIN_SLUG.zip"
+
+	download $URL $ZIP_PATH
+
+	if [[ ! -f "$ZIP_PATH" ]]; then
+		messageInstallationFailure "$PLUGIN_SLUG $VERSION"
+		return
+	fi
+
+	unzip -q $ZIP_PATH -d $WP_PLUGINS_DIR
 
 	local VERSION=$(getPackageVersion $INFO)
 
@@ -308,8 +323,17 @@ downloadThemeFromRepository() {
 		return
 	fi
 
-	download https://downloads.wordpress.org/theme/$THEME_SLUG.zip $DOWNLOADS_DIR/$THEME_SLUG.zip
-	unzip -q $DOWNLOADS_DIR/$THEME_SLUG.zip -d $WP_THEMES_DIR
+	# Download the plugin.
+	local ZIP_PATH="$DOWNLOADS_DIR/$PLUGIN_SLUG.zip"
+
+	download https://downloads.wordpress.org/theme/$THEME_SLUG.zip $ZIP_PATH
+
+	if [[ ! -f "$ZIP_PATH" ]]; then
+		messageInstallationFailure "$PLUGIN_SLUG $VERSION"
+		return
+	fi
+
+	unzip -q $ZIP_PATH -d $WP_THEMES_DIR
 
 	local VERSION=$(getVersionFromThemeFile $THEME_SLUG)
 
