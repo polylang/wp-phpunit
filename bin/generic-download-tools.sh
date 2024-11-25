@@ -17,7 +17,7 @@ getContent() {
 # $2 string Destination path to download the file to.
 download() {
 	if [[ `which curl` ]]; then
-		curl -s "$1" > "$2";
+		curl -sL "$1" > "$2";
 	elif [[ `which wget` ]]; then
 		wget -nv -O "$2" "$1"
 	fi
