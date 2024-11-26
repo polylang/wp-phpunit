@@ -324,12 +324,12 @@ downloadThemeFromRepository() {
 	fi
 
 	# Download the plugin.
-	local ZIP_PATH="$DOWNLOADS_DIR/$PLUGIN_SLUG.zip"
+	local ZIP_PATH="$DOWNLOADS_DIR/$THEME_SLUG.zip"
 
 	download https://downloads.wordpress.org/theme/$THEME_SLUG.zip $ZIP_PATH
 
 	if [[ ! -f "$ZIP_PATH" ]]; then
-		messageInstallationFailure "$PLUGIN_SLUG $VERSION"
+		messageInstallationFailure "$THEME_SLUG $VERSION"
 		return
 	fi
 
