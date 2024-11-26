@@ -56,18 +56,7 @@ downloadPluginFromRepository() {
 		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.$VERSION.zip $ZIP_PATH
 	fi
 
-	if [[ ! -f "$ZIP_PATH" ]]; then
-		messageInstallationFailure "$PLUGIN_SLUG $VERSION"
-		return
-	fi
-
-	unzip -q $ZIP_PATH -d $WP_PLUGINS_DIR
-
-	if [[ $? == 0 ]] ; then
-		messageSuccessfullyInstalled "$PLUGIN_SLUG $VERSION"
-	else
-		messageInstallationFailure "$PLUGIN_SLUG $VERSION"
-	fi ;
+	maybeUnzip $ZIP_PATH $WP_PLUGINS_DIR "$PLUGIN_SLUG $VERSION"
 }
 
 # Downloads a plugin distributed by a EDD install.
@@ -143,18 +132,7 @@ license $PLUGIN_SLUG:none"
 
 	download $URL $ZIP_PATH
 
-	if [[ ! -f "$ZIP_PATH" ]]; then
-		messageInstallationFailure "$PLUGIN_SLUG $VERSION"
-		return
-	fi
-
-	unzip -q $ZIP_PATH -d $WP_PLUGINS_DIR
-
-	if [[ $? == 0 ]] ; then
-		messageSuccessfullyInstalled "$PLUGIN_SLUG $VERSION"
-	else
-		messageInstallationFailure "$PLUGIN_SLUG $VERSION"
-	fi ;
+	maybeUnzip $ZIP_PATH $WP_PLUGINS_DIR "$PLUGIN_SLUG $VERSION"
 }
 
 # Downloads Polylang for WooCommerce.
@@ -443,4 +421,29 @@ messageSuccessfullyInstalled() {
 # return string
 messageInstallationFailure() {
 	formatMessage "${ERROR_C}$1${NO_C} installation failure."
+}
+
+# Unzips a file.
+# Writes to stdout whether the operation has been successful or not.
+#
+# $1 string The path to the zip file.
+# $2 string The path to the destination folder.
+# $3 string The name of the package being unzipped (usually "{slug} {version}").
+maybeUnzip() {
+	local ZIP_PATH="$1"
+	local DESTINATION_PATH="$2"
+	local NAME="$3"
+
+	if [[ ! -f "$ZIP_PATH" ]]; then
+		messageInstallationFailure $NAME
+		return
+	fi
+
+	unzip -q $ZIP_PATH -d $DESTINATION_PATH
+
+	if [[ $? == 0 ]] ; then
+		messageSuccessfullyInstalled $NAME
+	else
+		messageInstallationFailure $NAME
+	fi ;
 }
