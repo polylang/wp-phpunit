@@ -139,6 +139,7 @@ license $PLUGIN_SLUG:none"
 
 	# Download the plugin.
 	local ZIP_PATH="$DOWNLOADS_DIR/$PLUGIN_SLUG.zip"
+	local VERSION=$(getPackageVersion $INFO)
 
 	download $URL $ZIP_PATH
 
@@ -148,8 +149,6 @@ license $PLUGIN_SLUG:none"
 	fi
 
 	unzip -q $ZIP_PATH -d $WP_PLUGINS_DIR
-
-	local VERSION=$(getPackageVersion $INFO)
 
 	if [[ $? == 0 ]] ; then
 		messageSuccessfullyInstalled "$PLUGIN_SLUG $VERSION"
@@ -325,6 +324,7 @@ downloadThemeFromRepository() {
 
 	# Download the plugin.
 	local ZIP_PATH="$DOWNLOADS_DIR/$THEME_SLUG.zip"
+	local VERSION=$(getVersionFromThemeFile $THEME_SLUG)
 
 	download https://downloads.wordpress.org/theme/$THEME_SLUG.zip $ZIP_PATH
 
@@ -334,8 +334,6 @@ downloadThemeFromRepository() {
 	fi
 
 	unzip -q $ZIP_PATH -d $WP_THEMES_DIR
-
-	local VERSION=$(getVersionFromThemeFile $THEME_SLUG)
 
 	if [[ $? == 0 ]] ; then
 		messageSuccessfullyInstalled "$THEME_SLUG $VERSION"
