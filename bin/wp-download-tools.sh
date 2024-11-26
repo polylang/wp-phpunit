@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 TMPDIR=${TMPDIR-/tmp}
-TMPDIR=$(echo $TMPDIR | sed -e "s/\/$//")
+TMPDIR=$(echo "$TMPDIR" | sed -e "s/\/$//")
 DOWNLOADS_DIR="$TMPDIR/downloads"
 
 PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
@@ -18,8 +18,8 @@ WP_THEMES_DIR="$DEPS_DIR/themes"
 . "$PARENT_DIR/generic-download-tools.sh"
 
 # Create the downloads folder.
-mkdir -p $DOWNLOADS_DIR
-mkdir -p $DEPS_DIR
+mkdir -p "$DOWNLOADS_DIR"
+mkdir -p "$DEPS_DIR"
 
 # Downloads a plugin from the repository.
 # Ex: downloadPluginFromRepository woocommerce
@@ -51,12 +51,12 @@ downloadPluginFromRepository() {
 	local ZIP_PATH="$DOWNLOADS_DIR/$PLUGIN_SLUG.zip"
 
 	if [[ $VERSION == 'trunk' ]]; then
-		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.zip $ZIP_PATH
+		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.zip "$ZIP_PATH"
 	else
-		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.$VERSION.zip $ZIP_PATH
+		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.$VERSION.zip "$ZIP_PATH"
 	fi
 
-	maybeUnzip $ZIP_PATH $WP_PLUGINS_DIR "$PLUGIN_SLUG $VERSION"
+	maybeUnzip "$ZIP_PATH" "$WP_PLUGINS_DIR" "$PLUGIN_SLUG $VERSION"
 }
 
 # Downloads a plugin distributed by a EDD install.
@@ -128,11 +128,11 @@ license $PLUGIN_SLUG:none"
 
 	# Download the plugin.
 	local ZIP_PATH="$DOWNLOADS_DIR/$PLUGIN_SLUG.zip"
-	local VERSION=$(getPackageVersion $INFO)
+	local VERSION=$(getPackageVersion "$INFO")
 
-	download $URL $ZIP_PATH
+	download "$URL" "$ZIP_PATH"
 
-	maybeUnzip $ZIP_PATH $WP_PLUGINS_DIR "$PLUGIN_SLUG $VERSION"
+	maybeUnzip "$ZIP_PATH" "$WP_PLUGINS_DIR" "$PLUGIN_SLUG $VERSION"
 }
 
 # Downloads Polylang for WooCommerce.
@@ -161,7 +161,7 @@ downloadPolylangForWoocommerce() {
 	composer install --no-dev
 
 	if [[ ! $PLLWC_VERSION ]]; then
-		PLLWC_VERSION=$(getVersionFromPluginFile $PLUGIN_FILE)
+		PLLWC_VERSION=$(getVersionFromPluginFile "$PLUGIN_FILE")
 	fi
 
 	messageSuccessfullyInstalled "$PLUGIN_DIR $PLLWC_VERSION"
@@ -197,7 +197,7 @@ downloadPolylangPro() {
 	fi
 
 	if [[ ! $PLL_VERSION ]]; then
-		PLL_VERSION=$(getVersionFromPluginFile $PLUGIN_FILE)
+		PLL_VERSION=$(getVersionFromPluginFile "$PLUGIN_FILE")
 	fi
 
 	messageSuccessfullyInstalled "$PLUGIN_DIR $PLL_VERSION"
@@ -303,21 +303,21 @@ downloadThemeFromRepository() {
 	# Download the plugin.
 	local ZIP_PATH="$DOWNLOADS_DIR/$THEME_SLUG.zip"
 
-	download https://downloads.wordpress.org/theme/$THEME_SLUG.zip $ZIP_PATH
+	download https://downloads.wordpress.org/theme/$THEME_SLUG.zip "$ZIP_PATH"
 
 	if [[ ! -f "$ZIP_PATH" ]]; then
-		messageInstallationFailure $THEME_SLUG
+		messageInstallationFailure "$THEME_SLUG"
 		return
 	fi
 
-	unzip -q $ZIP_PATH -d $WP_THEMES_DIR
+	unzip -q "$ZIP_PATH" -d "$WP_THEMES_DIR"
 
 	if [[ ! -f "$WP_THEMES_DIR/$THEME_SLUG/style.css" ]]; then
-		messageInstallationFailure $THEME_SLUG
+		messageInstallationFailure "$THEME_SLUG"
 		return
 	fi
 
-	local VERSION=$(getVersionFromThemeFile $THEME_SLUG)
+	local VERSION=$(getVersionFromThemeFile "$THEME_SLUG")
 
 	if [[ $? == 0 ]] ; then
 		messageSuccessfullyInstalled "$THEME_SLUG $VERSION"
@@ -435,15 +435,15 @@ maybeUnzip() {
 	local NAME="$3"
 
 	if [[ ! -f "$ZIP_PATH" ]]; then
-		messageInstallationFailure $NAME
+		messageInstallationFailure "$NAME"
 		return
 	fi
 
-	unzip -q $ZIP_PATH -d $DESTINATION_PATH
+	unzip -q "$ZIP_PATH" -d "$DESTINATION_PATH"
 
 	if [[ $? == 0 ]] ; then
-		messageSuccessfullyInstalled $NAME
+		messageSuccessfullyInstalled "$NAME"
 	else
-		messageInstallationFailure $NAME
+		messageInstallationFailure "$NAME"
 	fi ;
 }
