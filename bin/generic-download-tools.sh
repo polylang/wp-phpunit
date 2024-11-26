@@ -5,9 +5,9 @@
 # $1 string Contents URL.
 getContent() {
 	if [[ `which curl` ]]; then
-		curl -s "$1";
+		curl -s --proto '=https' "$1";
 	elif [[ `which wget` ]]; then
-		wget "$1" -q -O -
+		wget --https-only "$1" -q -O -
 	fi
 }
 
@@ -17,8 +17,8 @@ getContent() {
 # $2 string Destination path to download the file to.
 download() {
 	if [[ `which curl` ]]; then
-		curl -s "$1" > "$2";
+		curl -sL --proto '=https' --max-redirs 1 "$1" > "$2";
 	elif [[ `which wget` ]]; then
-		wget -nv -O "$2" "$1"
+		wget --https-only -nv --max-redirect=1 -O "$2" "$1"
 	fi
 }

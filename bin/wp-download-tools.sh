@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 TMPDIR=${TMPDIR-/tmp}
-TMPDIR=$(echo $TMPDIR | sed -e "s/\/$//")
+TMPDIR=$(echo "$TMPDIR" | sed -e "s/\/$//")
 DOWNLOADS_DIR="$TMPDIR/downloads"
 
 PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
@@ -18,8 +18,8 @@ WP_THEMES_DIR="$DEPS_DIR/themes"
 . "$PARENT_DIR/generic-download-tools.sh"
 
 # Create the downloads folder.
-mkdir -p $DOWNLOADS_DIR
-mkdir -p $DEPS_DIR
+mkdir -p "$DOWNLOADS_DIR"
+mkdir -p "$DEPS_DIR"
 
 # Downloads a plugin from the repository.
 # Ex: downloadPluginFromRepository woocommerce
@@ -48,19 +48,15 @@ downloadPluginFromRepository() {
 	fi
 
 	# Download the plugin.
+	local ZIP_PATH="$DOWNLOADS_DIR/$PLUGIN_SLUG.zip"
+
 	if [[ $VERSION == 'trunk' ]]; then
-		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.zip $DOWNLOADS_DIR/$PLUGIN_SLUG.zip
+		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.zip "$ZIP_PATH"
 	else
-		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.$VERSION.zip $DOWNLOADS_DIR/$PLUGIN_SLUG.zip
+		download https://downloads.wordpress.org/plugin/$PLUGIN_SLUG.$VERSION.zip "$ZIP_PATH"
 	fi
 
-	unzip -q $DOWNLOADS_DIR/$PLUGIN_SLUG.zip -d $WP_PLUGINS_DIR
-
-	if [[ $? == 0 ]] ; then
-		messageSuccessfullyInstalled "$PLUGIN_SLUG $VERSION"
-	else
-		messageInstallationFailure "$PLUGIN_SLUG $VERSION"
-	fi ;
+	maybeUnzip "$ZIP_PATH" "$WP_PLUGINS_DIR" "$PLUGIN_SLUG $VERSION"
 }
 
 # Downloads a plugin distributed by a EDD install.
@@ -116,9 +112,9 @@ license $PLUGIN_SLUG:none"
 	local HEADERS='Content-Type: application/x-www-form-urlencoded;Cache-Control: no-cache;Accept: application/json;Connection: keep-alive'
 
 	if [[ `which curl` ]]; then
-		local INFO=$(curl -d "$PARAMS" -H "$HADERS" -X POST -s "$URL")
+		local INFO=$(curl -d "$PARAMS" -H "$HEADERS" -X POST -s "$URL")
 	elif [[ `which wget` ]]; then
-		local INFO=$(wget --post-data "$PARAMS" --header "$HADERS" "$URL" -q -O -)
+		local INFO=$(wget --post-data "$PARAMS" --header "$HEADERS" "$URL" -q -O -)
 	fi
 
 	local URL=$(getPackageUrl "$INFO")
@@ -131,16 +127,12 @@ license $PLUGIN_SLUG:none"
 	fi
 
 	# Download the plugin.
-	download $URL $DOWNLOADS_DIR/$PLUGIN_SLUG.zip
-	unzip -q $DOWNLOADS_DIR/$PLUGIN_SLUG.zip -d $WP_PLUGINS_DIR
+	local ZIP_PATH="$DOWNLOADS_DIR/$PLUGIN_SLUG.zip"
+	local VERSION=$(getPackageVersion "$INFO")
 
-	local VERSION=$(getPackageVersion $INFO)
+	download "$URL" "$ZIP_PATH"
 
-	if [[ $? == 0 ]] ; then
-		messageSuccessfullyInstalled "$PLUGIN_SLUG $VERSION"
-	else
-		messageInstallationFailure "$PLUGIN_SLUG $VERSION"
-	fi ;
+	maybeUnzip "$ZIP_PATH" "$WP_PLUGINS_DIR" "$PLUGIN_SLUG $VERSION"
 }
 
 # Downloads Polylang for WooCommerce.
@@ -169,7 +161,7 @@ downloadPolylangForWoocommerce() {
 	composer install --no-dev
 
 	if [[ ! $PLLWC_VERSION ]]; then
-		PLLWC_VERSION=$(getVersionFromPluginFile $PLUGIN_FILE)
+		PLLWC_VERSION=$(getVersionFromPluginFile "$PLUGIN_FILE")
 	fi
 
 	messageSuccessfullyInstalled "$PLUGIN_DIR $PLLWC_VERSION"
@@ -205,7 +197,7 @@ downloadPolylangPro() {
 	fi
 
 	if [[ ! $PLL_VERSION ]]; then
-		PLL_VERSION=$(getVersionFromPluginFile $PLUGIN_FILE)
+		PLL_VERSION=$(getVersionFromPluginFile "$PLUGIN_FILE")
 	fi
 
 	messageSuccessfullyInstalled "$PLUGIN_DIR $PLL_VERSION"
@@ -308,10 +300,24 @@ downloadThemeFromRepository() {
 		return
 	fi
 
-	download https://downloads.wordpress.org/theme/$THEME_SLUG.zip $DOWNLOADS_DIR/$THEME_SLUG.zip
-	unzip -q $DOWNLOADS_DIR/$THEME_SLUG.zip -d $WP_THEMES_DIR
+	# Download the plugin.
+	local ZIP_PATH="$DOWNLOADS_DIR/$THEME_SLUG.zip"
 
-	local VERSION=$(getVersionFromThemeFile $THEME_SLUG)
+	download https://downloads.wordpress.org/theme/$THEME_SLUG.zip "$ZIP_PATH"
+
+	if [[ ! -f "$ZIP_PATH" ]]; then
+		messageInstallationFailure "$THEME_SLUG"
+		return
+	fi
+
+	unzip -q "$ZIP_PATH" -d "$WP_THEMES_DIR"
+
+	if [[ ! -f "$WP_THEMES_DIR/$THEME_SLUG/style.css" ]]; then
+		messageInstallationFailure "$THEME_SLUG"
+		return
+	fi
+
+	local VERSION=$(getVersionFromThemeFile "$THEME_SLUG")
 
 	if [[ $? == 0 ]] ; then
 		messageSuccessfullyInstalled "$THEME_SLUG $VERSION"
@@ -415,4 +421,29 @@ messageSuccessfullyInstalled() {
 # return string
 messageInstallationFailure() {
 	formatMessage "${ERROR_C}$1${NO_C} installation failure."
+}
+
+# Unzips a file.
+# Writes to stdout whether the operation has been successful or not.
+#
+# $1 string The path to the zip file.
+# $2 string The path to the destination folder.
+# $3 string The name of the package being unzipped (usually "{slug} {version}").
+maybeUnzip() {
+	local ZIP_PATH="$1"
+	local DESTINATION_PATH="$2"
+	local NAME="$3"
+
+	if [[ ! -f "$ZIP_PATH" ]]; then
+		messageInstallationFailure "$NAME"
+		return
+	fi
+
+	unzip -q "$ZIP_PATH" -d "$DESTINATION_PATH"
+
+	if [[ $? == 0 ]] ; then
+		messageSuccessfullyInstalled "$NAME"
+	else
+		messageInstallationFailure "$NAME"
+	fi ;
 }
