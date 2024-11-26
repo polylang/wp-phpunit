@@ -5,9 +5,9 @@
 # $1 string Contents URL.
 getContent() {
 	if [[ `which curl` ]]; then
-		curl -s "$1";
+		curl -s --proto '=https' "$1";
 	elif [[ `which wget` ]]; then
-		wget "$1" -q -O -
+		wget --https-only "$1" -q -O -
 	fi
 }
 
