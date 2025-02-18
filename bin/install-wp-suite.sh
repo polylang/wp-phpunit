@@ -16,6 +16,9 @@ WP_TESTS_DIR="$WORKING_DIR/tmp/wordpress-tests-lib"
 # Include color values.
 . "$PARENT_DIR/colors.sh"
 
+# Include generic tools.
+. "$PARENT_DIR/tools.sh"
+
 # Installs the WordPress test suite by using a local config file.
 # Ex: installWpSuite latest true
 # This requires a local config file named `DB-CONFIG` and located at the root of the project. This file must contain the
@@ -33,7 +36,8 @@ WP_TESTS_DIR="$WORKING_DIR/tmp/wordpress-tests-lib"
 # Globals: PARENT_DIR, WP_CORE_DIR, $WP_TESTS_DIR
 #
 # $1 string The WordPress version to install. Default 'latest'.
-# $2 string Whether to install the database or not: 'true' or 'false'. Default 'false'.
+# $2 string Whether to install the database or not: 'true' or 'false'. Default `false`.
+# $3 string Whether to clear caches after the install or not. Default `true`.
 installWpSuite() {
 	rm -rf "$WP_CORE_DIR/"
 	rm -rf "$WP_TESTS_DIR/"
@@ -69,6 +73,10 @@ installWpSuite() {
   - WP version: ${INFO_C}${WP_VERSION}${NO_C}
   - Skip DB creation: ${INFO_C}${SKIP_DB_CREATION}${NO_C}"
 	. "$PARENT_DIR/install-wp-tests.sh" "$DB_NAME" "$DB_USER" "$DB_PASS" "$DB_HOST" "$WP_VERSION" "$SKIP_DB_CREATION"
+
+	if [[ 'true' == $3 ]]; then
+		clear_patchwork_cache
+	fi
 }
 
 # Returns the value of the given config name.
@@ -89,4 +97,4 @@ getConfigValue() {
 	echo $CONF
 }
 
-installWpSuite $1 $2
+installWpSuite $1 $2 ${3:-'true'}
