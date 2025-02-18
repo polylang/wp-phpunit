@@ -36,8 +36,8 @@ WP_TESTS_DIR="$WORKING_DIR/tmp/wordpress-tests-lib"
 # Globals: PARENT_DIR, WP_CORE_DIR, $WP_TESTS_DIR
 #
 # $1 string The WordPress version to install. Default 'latest'.
-# $2 string Whether to install the database or not: 'true' or 'false'. Default `false`.
-# $3 string Whether to clear caches after the install or not. Default `true`.
+# $2 string Whether to install the database or not: 'true' or 'false'. Default 'false'.
+# $3 string Whether to clear caches after the install or not. Default 'true'.
 installWpSuite() {
 	rm -rf "$WP_CORE_DIR/"
 	rm -rf "$WP_TESTS_DIR/"
