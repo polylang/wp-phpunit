@@ -34,7 +34,6 @@ WP_TESTS_DIR="$WORKING_DIR/tmp/wordpress-tests-lib"
 #
 # $1 string The WordPress version to install. Default 'latest'.
 # $2 string Whether to install the database or not: 'true' or 'false'. Default 'false'.
-# $3 string Whether to clear caches after the install or not. Default 'true'.
 installWpSuite() {
 	rm -rf "$WP_CORE_DIR/"
 	rm -rf "$WP_TESTS_DIR/"
@@ -74,9 +73,8 @@ installWpSuite() {
 	# Shut up.
 	set +x
 
-	if [[ ! -n "$3" || 'true' == $3 ]]; then
-		clear_patchwork_cache
-	fi
+	# Clear cache.
+	clear_patchwork_cache
 }
 
 # Returns the value of the given config name.
@@ -97,4 +95,4 @@ getConfigValue() {
 	echo $CONF
 }
 
-installWpSuite $1 $2 $3
+installWpSuite $1 $2
