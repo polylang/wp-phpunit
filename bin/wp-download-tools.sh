@@ -11,14 +11,8 @@ DEPS_DIR="$WORKING_DIR/tmp"
 WP_PLUGINS_DIR="$DEPS_DIR/plugins"
 WP_THEMES_DIR="$DEPS_DIR/themes"
 
-# Include color values.
-. "$PARENT_DIR/colors.sh"
-
-# Include generic tools.
+# Include tools.
 . "$PARENT_DIR/tools.sh"
-
-# Include download tools.
-. "$PARENT_DIR/generic-download-tools.sh"
 
 # Create the downloads folder.
 mkdir -p "$DOWNLOADS_DIR"

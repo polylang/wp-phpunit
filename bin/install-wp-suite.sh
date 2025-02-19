@@ -13,9 +13,6 @@ PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 WP_CORE_DIR="$WORKING_DIR/tmp/wordpress"
 WP_TESTS_DIR="$WORKING_DIR/tmp/wordpress-tests-lib"
 
-# Include color values.
-. "$PARENT_DIR/colors.sh"
-
 # Include generic tools.
 . "$PARENT_DIR/tools.sh"
 
