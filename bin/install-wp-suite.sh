@@ -74,7 +74,7 @@ installWpSuite() {
   - Skip DB creation: ${INFO_C}${SKIP_DB_CREATION}${NO_C}"
 	. "$PARENT_DIR/install-wp-tests.sh" "$DB_NAME" "$DB_USER" "$DB_PASS" "$DB_HOST" "$WP_VERSION" "$SKIP_DB_CREATION"
 
-	if [[ 'true' == $3 ]]; then
+	if [[ ! -n "$3" || 'true' == $3 ]]; then
 		clear_patchwork_cache
 	fi
 }
@@ -97,4 +97,4 @@ getConfigValue() {
 	echo $CONF
 }
 
-installWpSuite $1 $2 ${3:-'true'}
+installWpSuite $1 $2 $3

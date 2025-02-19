@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+# Formats a message to be printed.
+#
+# $1     string The message.
+# return string
+formatMessage() {
+	echo -e "  - $1"
+}
+
 # Clear Patchwork cache.
 #
 # Globals: PWD, ERROR_C, INFO_C, SUCCESS_C, NO_C
