@@ -13,8 +13,8 @@ PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 WP_CORE_DIR="$WORKING_DIR/tmp/wordpress"
 WP_TESTS_DIR="$WORKING_DIR/tmp/wordpress-tests-lib"
 
-# Include color values.
-. "$PARENT_DIR/colors.sh"
+# Include generic tools.
+. "$PARENT_DIR/tools.sh"
 
 # Installs the WordPress test suite by using a local config file.
 # Ex: installWpSuite latest true
@@ -69,6 +69,12 @@ installWpSuite() {
   - WP version: ${INFO_C}${WP_VERSION}${NO_C}
   - Skip DB creation: ${INFO_C}${SKIP_DB_CREATION}${NO_C}"
 	. "$PARENT_DIR/install-wp-tests.sh" "$DB_NAME" "$DB_USER" "$DB_PASS" "$DB_HOST" "$WP_VERSION" "$SKIP_DB_CREATION"
+
+	# Shut up.
+	set +x
+
+	# Clear cache.
+	clear_patchwork_cache
 }
 
 # Returns the value of the given config name.

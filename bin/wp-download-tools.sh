@@ -11,11 +11,8 @@ DEPS_DIR="$WORKING_DIR/tmp"
 WP_PLUGINS_DIR="$DEPS_DIR/plugins"
 WP_THEMES_DIR="$DEPS_DIR/themes"
 
-# Include color values.
-. "$PARENT_DIR/colors.sh"
-
-# Include download tools.
-. "$PARENT_DIR/generic-download-tools.sh"
+# Include tools.
+. "$PARENT_DIR/tools.sh"
 
 # Create the downloads folder.
 mkdir -p "$DOWNLOADS_DIR"
@@ -383,14 +380,6 @@ getVersionFromPluginFile() {
 getVersionFromThemeFile() {
 	local VERSION=$(grep -i "^[ \t/*#@]*Version:" "$WP_THEMES_DIR/$1/style.css" | grep -Eo '[0-9]+(\..+)?$')
 	echo ${VERSION/ }
-}
-
-# Formats a message to be printed.
-#
-# $1     string The message.
-# return string
-formatMessage() {
-	echo -e "  - $1"
 }
 
 # Formats a "already installed" message to be printed for the given dependency.
