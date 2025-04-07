@@ -195,6 +195,13 @@ class Bootstrap {
 			return $this->paths['wp_tests_dir'];
 		}
 
+		// In wp-env Docker container.
+		$this->paths['wp_tests_dir'] = getenv( 'WP_TESTS_DIR' );
+
+		if ( file_exists( $this->paths['wp_tests_dir'] . '/includes/' ) ) {
+			return $this->paths['wp_tests_dir'];
+		}
+
 		// In local `tmp` dir.
 		$this->paths['wp_tests_dir'] = WPSYNTEX_PROJECT_PATH . 'tmp/wordpress-tests-lib';
 
