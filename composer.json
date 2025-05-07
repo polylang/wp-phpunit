@@ -14,7 +14,7 @@
 	"require": {
 		"php": ">=7.0",
 		"cheprasov/php-cli-args": "^3.0",
-		"symfony/console": "^3.4 || ^4.4",
+		"symfony/console": "^3.4 || ^4.4 || ^5.4 || ^6.4 || ^7.0",
 		"yoast/wp-test-utils": "^1.0.0"
 	},
 	"require-dev": {
