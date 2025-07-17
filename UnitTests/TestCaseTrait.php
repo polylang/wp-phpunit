@@ -19,7 +19,7 @@ use WP_Error;
 trait TestCaseTrait {
 
 	/**
-	 * An instanciated `__return_true()`.
+	 * An instantiated `__return_true()`.
 	 *
 	 * @return bool
 	 */
@@ -28,7 +28,7 @@ trait TestCaseTrait {
 	}
 
 	/**
-	 * An instanciated `__return_false()`.
+	 * An instantiated `__return_false()`.
 	 *
 	 * @return bool
 	 */

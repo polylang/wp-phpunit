@@ -87,7 +87,7 @@ trait TestCaseTrait {
 			remove_filter( 'pre_option_active_plugins', [ $this, 'filterActivePlugins' ] );
 		}
 
-		self::$model->clean_languages_cache(); // We must do it before database ROLLBACK otherwhise it is impossible to delete the transient.
+		self::$model->clean_languages_cache(); // We must do it before database ROLLBACK otherwise it is impossible to delete the transient.
 
 		$globals = [ 'current_screen', 'hook_suffix', 'wp_settings_errors', 'post_type', 'wp_scripts', 'wp_styles' ];
 
@@ -113,7 +113,7 @@ trait TestCaseTrait {
 	 * @throws InvalidArgumentException If language is not created.
 	 *
 	 * @param  string       $locale Language locale.
-	 * @param  array<mixed> $args   Allows to optionnally override the default values for the language.
+	 * @param  array<mixed> $args   Allows to optionally override the default values for the language.
 	 * @return void
 	 */
 	protected static function createLanguage( $locale, $args = [] ) {
