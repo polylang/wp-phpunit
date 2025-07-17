@@ -182,7 +182,7 @@ trait TestCaseTrait {
 		} else {
 			$previousValue = $ref->getValue();
 			// Static property.
-			$ref->setValue( $value );
+			$ref->setValue( null, $value );
 		}
 
 		return $previousValue;
@@ -281,7 +281,7 @@ trait TestCaseTrait {
 			$ref->setValue( $objInstance, $value );
 		} else {
 			// Static property.
-			$ref->setValue( $value );
+			$ref->setValue( null, $value );
 		}
 
 		$ref->setAccessible( false );
