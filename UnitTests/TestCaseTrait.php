@@ -19,7 +19,7 @@ use WP_Error;
 trait TestCaseTrait {
 
 	/**
-	 * An instanciated `__return_true()`.
+	 * An instantiated `__return_true()`.
 	 *
 	 * @return bool
 	 */
@@ -28,7 +28,7 @@ trait TestCaseTrait {
 	}
 
 	/**
-	 * An instanciated `__return_false()`.
+	 * An instantiated `__return_false()`.
 	 *
 	 * @return bool
 	 */
@@ -182,7 +182,7 @@ trait TestCaseTrait {
 		} else {
 			$previousValue = $ref->getValue();
 			// Static property.
-			$ref->setValue( $value );
+			$ref->setValue( null, $value );
 		}
 
 		return $previousValue;
@@ -281,7 +281,7 @@ trait TestCaseTrait {
 			$ref->setValue( $objInstance, $value );
 		} else {
 			// Static property.
-			$ref->setValue( $value );
+			$ref->setValue( null, $value );
 		}
 
 		$ref->setAccessible( false );
