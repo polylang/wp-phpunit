@@ -242,7 +242,7 @@ trait TestCaseTrait {
 	 */
 	public static function getReflectiveMethod( $objInstance, $methodName ) {
 		$ref = new ReflectionMethod( $objInstance, $methodName );
-		$ref->setAccessible( true );
+		( \PHP_VERSION_ID < 80100 ) && $ref->setAccessible( true );
 
 		return $ref;
 	}
@@ -258,7 +258,7 @@ trait TestCaseTrait {
 	 */
 	public static function getReflectiveProperty( $objInstance, $propertyName ) {
 		$ref = new ReflectionProperty( $objInstance, $propertyName );
-		$ref->setAccessible( true );
+		( \PHP_VERSION_ID < 80100 ) && $ref->setAccessible( true );
 
 		return $ref;
 	}
@@ -284,7 +284,7 @@ trait TestCaseTrait {
 			$ref->setValue( null, $value );
 		}
 
-		$ref->setAccessible( false );
+		( \PHP_VERSION_ID < 80100 ) && $ref->setAccessible( false );
 
 		return $ref;
 	}
