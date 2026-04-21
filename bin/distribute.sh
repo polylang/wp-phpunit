@@ -12,13 +12,9 @@ PARENT_DIR=$( cd "$(dirname "${BASH_SOURCE[0]}")" ; pwd -P )
 . "$PARENT_DIR/colors.sh"
 
 # Make sure to remove all traces of development dependencies.
-rm -rf vendor
-# Update/Install to ensure to have the latest version of the dependencies.
-if [[ -e "composer.lock" ]]; then
-	composer update --no-dev
-else
-	composer install --no-dev
-fi
+rm -rf vendor composer.lock
+
+composer install --optimize-autoloader --no-dev
 
 if [[ $1 ]]; then
 	PACKAGE_NAME=$1
