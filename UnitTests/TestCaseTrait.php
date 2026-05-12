@@ -37,6 +37,24 @@ trait TestCaseTrait {
 	}
 
 	/**
+	 * Asserts that translations are identical. Backward compatibility with PLL < 3.9.
+	 *
+	 * Since PLL 3.9, translations is an object, not an array anymore.
+	 *
+	 * @param array        $expected     Expected value.
+	 * @param array|object $translations The value under test.
+	 * @return void
+	 */
+	protected function assertSameTranslations( array $expected, $translations ): void {
+		if ( version_compare( (string) preg_replace( '/-.*$/', '', POLYLANG_VERSION ), '3.9' ) >= 0 ) { // Strip -dev suffix out.
+			$this->assertInstanceOf( \stdClass::class, $translations );
+			$translations = (array) $translations;
+		}
+
+		$this->assertSameSetsWithIndex( $expected, $translations );
+	}
+
+	/**
 	 * Returns the test data, if it exists, for this test class.
 	 *
 	 * @param string $dirPath  Directory of the test class.
